@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:GoalTracker.Views"
+       Title="GoalTracker"
+       x:Class="GoalTracker.AppShell">
+
+    <!--
+        The overall app visual hierarchy is defined here, along with navigation.
+    
+        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
+    -->
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="{StaticResource VeryDark}" />
+                <Setter Property="Shell.DisabledColor" Value="{StaticResource VeryDarkTrans}" />
+                <Setter Property="Shell.UnselectedColor" Value="{StaticResource VeryDarkTrans}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource VeryDark}"/>
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource VeryDarkTrans}"/>
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource VeryDark}"/>
+            </Style>
+            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <TabBar>
+        <ShellContent Title="Achievments" Icon="outline_done_black_24.png" Route="Achievments" ContentTemplate="{DataTemplate local:Achievments}" />
+        <ShellContent Title="Goals" Icon="outline_manage_accounts_black_24.png" Route="Goals" ContentTemplate="{DataTemplate local:Goals}" />
+        <ShellContent Title="Trends" Icon="outline_trending_up_black_24.png" Route="Trends" ContentTemplate="{DataTemplate local:Trends}" />
+    </TabBar>
+
+</Shell>
