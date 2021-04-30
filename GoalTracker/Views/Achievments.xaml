@@ -19,32 +19,38 @@
                 <ImageButton Source="outline_navigate_next_black_24.png" BackgroundColor="Transparent"/>
             </StackLayout>
             <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0"/>
-            <CollectionView ItemsSource="{Binding CurrentGoals}"
+            <CollectionView x:Name="Entries"
                             SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
                               ColumnDefinitions=".3*, .3*, .15*">
-                            <Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Text="{Binding CategoryName}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
                             <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
-                                <Label Text="{Binding CurrentGoal}" VerticalOptions="Center" FontSize="Medium"/>
+                                <Label Text="{Binding Quantity}" VerticalOptions="Center" FontSize="Medium"/>
                                 <Label Text="{Binding Units}" VerticalOptions="Center"/>
                             </StackLayout>
-                            <ImageButton Grid.Column="2" Source="outline_clear_black_24.png" BackgroundColor="Transparent" HorizontalOptions="End"/>
+                            <ImageButton 
+                                Grid.Column="2" 
+                                Source="outline_clear_black_24.png" 
+                                BackgroundColor="Transparent" 
+                                HorizontalOptions="End" 
+                                Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=Entries}}" 
+                                CommandParameter="{Binding .}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <Label Text="Add Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}"/>
-            <CollectionView ItemsSource="{Binding CurrentGoals}"
-                            SelectionMode="None">
+            <CollectionView x:Name="Categories"
+                            SelectionMode="None" VerticalOptions="EndAndExpand">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
                               ColumnDefinitions=".3*, .3*, .15*">
                             <Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
                             <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
-                                <Entry Text="{Binding CurrentGoal}" Keyboard="Numeric"/>
+                                <Entry Text="{Binding CurrentGoal}" Keyboard="Numeric" Unfocused="Entry_Unfocused"/>
                                 <Label Text="{Binding Units}" VerticalOptions="Center"/>
                             </StackLayout>
                             <ImageButton Grid.Column="2" Source="outline_done_black_24.png" BackgroundColor="Transparent" HorizontalOptions="End"/>
