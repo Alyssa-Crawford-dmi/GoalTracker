@@ -15,6 +15,11 @@ namespace GoalTracker
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Category>().Wait();
             _database.CreateTableAsync<BasicEntry>().Wait();
+
+            //_database.InsertAsync(new Category { Name = "Fake 1", TargetQuantity = 10, Units = "Reps" });
+            //_database.InsertAsync(new Category { Name = "Fake 2", TargetQuantity = 10, Units = "Reps" });
+            //_database.InsertAsync(new Category { Name = "Fake 3", TargetQuantity = 10, Units = "Reps" });
+            //_database.InsertAsync(new Category { Name = "Fake 4", TargetQuantity = 10, Units = "Reps" });
         }
 
         public async Task<List<DisplayEntry>> GetDisplyEntriesForDateAsync(DateTime date)
@@ -30,15 +35,25 @@ namespace GoalTracker
 
             return displayEntires;
         }
-
         public Task<int> SaveEntryAsync(BasicEntry entry)
         {
             return _database.InsertAsync(entry);
         }
 
-        public async Task<int> DeleteEntryAsync(int entryId)
+        public Task<int> DeleteEntryAsync(int entryId)
         {
-            return await _database.DeleteAsync<BasicEntry>(entryId);
+            return _database.DeleteAsync<BasicEntry>(entryId);
+        }
+
+
+        internal Task UpdateCategoryAsync(Category goal)
+        {
+            return _database.UpdateAsync(goal);
+        }
+
+        internal Task DeleteCategoryAsync(int goalId)
+        {
+            return _database.DeleteAsync<Category>(goalId);
         }
 
         public Task<List<Category>> GetCategoriesAsync()

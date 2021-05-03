@@ -8,10 +8,33 @@
         <vm:GoalsViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Margin="5">
+            <Label Text="Goals" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}"/>
+            <CollectionView x:Name="GoalsList" SelectionMode="None" ItemsSource="{Binding CurrentGoals}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="7,0,7,7" ColumnDefinitions="2*,2*,1*,1*">
+                            <Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="CenterAndExpand">
+                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End"/>
+                                <Label Text="{Binding Units}" VerticalOptions="Center"/>
+                            </StackLayout>
+                            <ImageButton 
+                                Grid.Column="2" 
+                                Source="outline_done_black_24.png" 
+                                HorizontalOptions="End" 
+                                Command="{Binding Path=BindingContext.UpdateCommand, Source={x:Reference Name=GoalsList}}" 
+                                CommandParameter="{Binding .}"/>
+                            <ImageButton 
+                                Grid.Column="3" 
+                                Source="outline_clear_black_24.png" 
+                                HorizontalOptions="End" 
+                                Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=GoalsList}}" 
+                                CommandParameter="{Binding .}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

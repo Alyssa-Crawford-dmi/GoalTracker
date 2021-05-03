@@ -50,11 +50,6 @@ namespace GoalTracker.ViewModels
             LoadData();
         }
 
-        public async void UpdateDateStr(DateTime newDateTime)
-        {
-
-        }
-
         private async void LoadData()
         {
             CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
@@ -74,8 +69,7 @@ namespace GoalTracker.ViewModels
             BasicEntry newEntry = new BasicEntry
             { CategoryId = goal.Id, Date = dateViewing, IsGoal = false, Quantity = goal.TargetQuantity };
             await App.Database.SaveEntryAsync(newEntry);
-            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
-            CurrentGoals = await App.Database.GetCategoriesAsync();
+            LoadData();
         }
 
         private void IncreaseDate(object obj)
