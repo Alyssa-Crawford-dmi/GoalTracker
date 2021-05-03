@@ -19,14 +19,12 @@ namespace GoalTracker
 
         public async Task<List<DisplayEntry>> GetDisplyEntriesForDateAsync(DateTime date)
         {
-            // TODO make for date
-            List<BasicEntry> basicEntries =  await _database.Table<BasicEntry>().Where(entry => entry.Date == date).ToListAsync();
+            List<BasicEntry> basicEntries = await _database.Table<BasicEntry>().Where(entry => entry.Date == date).ToListAsync();
             List<DisplayEntry> displayEntires = new List<DisplayEntry>();
-            foreach(BasicEntry entry in basicEntries)
+            foreach (BasicEntry entry in basicEntries)
             {
                 Category category = await _database.Table<Category>().Where(cat => cat.Id == entry.CategoryId).FirstOrDefaultAsync();
-                DisplayEntry displayEntry = new DisplayEntry
-                { CategoryName = category.Name, Date = entry.Date, Quantity = entry.Quantity, Units = category.Units, Id=entry.Id };
+                DisplayEntry displayEntry = new DisplayEntry { CategoryName = category.Name, Date = entry.Date, Quantity = entry.Quantity, Units = category.Units, Id = entry.Id };
                 displayEntires.Add(displayEntry);
             }
 
@@ -43,7 +41,7 @@ namespace GoalTracker
             return await _database.DeleteAsync<BasicEntry>(entryId);
         }
 
-        public  Task<List<Category>> GetCategoriesAsync()
+        public Task<List<Category>> GetCategoriesAsync()
         {
             return _database.Table<Category>().ToListAsync();
         }

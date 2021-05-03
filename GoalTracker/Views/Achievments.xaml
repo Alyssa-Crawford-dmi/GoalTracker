@@ -24,10 +24,10 @@
                     BackgroundColor="Transparent"
                     Command="{Binding IncreaseDateCommand}"/>
             </StackLayout>
-            <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0"/>
+            <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0" />
             <CollectionView x:Name="Entries"
-                            SelectionMode="None" ItemsSource="{Binding CurrentEntries}">
-                <CollectionView.ItemTemplate>
+                            SelectionMode="None" ItemsSource="{Binding CurrentEntries}" VerticalOptions="Start" BackgroundColor="Aqua">
+                <CollectionView.ItemTemplate >
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
                               ColumnDefinitions=".3*, .3*, .15*">
@@ -49,7 +49,7 @@
             </CollectionView>
             <Label Text="Add Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}"/>
             <CollectionView x:Name="Categories"
-                            SelectionMode="None" VerticalOptions="EndAndExpand" ItemsSource="{Binding CurrentGoals}">
+                            SelectionMode="None" VerticalOptions="StartAndExpand" ItemsSource="{Binding CurrentGoals}" BackgroundColor="Beige">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
