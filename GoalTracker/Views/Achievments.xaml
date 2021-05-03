@@ -18,7 +18,7 @@
                     Source="outline_navigate_before_black_24.png" 
                     BackgroundColor="Transparent"  
                     Command="{Binding DecreaseDateCommand}"/>
-                <Label Text="{Binding DateTextToDisplay}" VerticalOptions="Center" FontSize="Large" Padding="5, 0"/>
+                <Label Text="{Binding DateTextToDisplay}" VerticalOptions="Center" FontSize="Large" Padding="2, 0" WidthRequest="125" HorizontalTextAlignment="Center"/>
                 <ImageButton 
                     Source="outline_navigate_next_black_24.png" 
                     BackgroundColor="Transparent"
@@ -55,8 +55,8 @@
                         <Grid Padding="7,0,7,7"
                               ColumnDefinitions=".3*, .3*, .15*">
                             <Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
-                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" />
+                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="CenterAndExpand">
+                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End"/>
                                 <Label Text="{Binding Units}" VerticalOptions="Center"/>
                             </StackLayout>
                             <ImageButton 

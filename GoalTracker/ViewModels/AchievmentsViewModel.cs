@@ -7,22 +7,22 @@ using Xamarin.Forms;
 
 namespace GoalTracker.ViewModels
 {
-    public class AchievmentsViewModel:BaseViewModel
+    public class AchievmentsViewModel : BaseViewModel
     {
         private IList<Category> currentGoals;
         private IList<DisplayEntry> currentEntries;
         private DateTime dateViewing;
         private string dateTextToDisplay;
 
-        public IList<Category> CurrentGoals 
-        { 
-            get=> currentGoals; 
-            private set => SetProperty(ref currentGoals, value); 
+        public IList<Category> CurrentGoals
+        {
+            get => currentGoals;
+            private set => SetProperty(ref currentGoals, value);
         }
-        public IList<DisplayEntry> CurrentEntries 
-        { 
+        public IList<DisplayEntry> CurrentEntries
+        {
             get => currentEntries;
-            private set => SetProperty(ref currentEntries, value); 
+            private set => SetProperty(ref currentEntries, value);
         }
         public DateTime DateViewing
         {
@@ -47,14 +47,15 @@ namespace GoalTracker.ViewModels
             DecreaseDateCommand = new Command(DecreaseDate);
             IncreaseDateCommand = new Command(IncreaseDate);
             Title = "Achievments";
-            DateViewing = DateTime.Today;
+            //DateViewing = DateTime.Today;
+            DateViewing = new DateTime(2021, 12, 29);
             LoadData();
         }
 
         public async void UpdateDateStr(DateTime newDateTime)
         {
             SetProperty(ref dateViewing, newDateTime);
-            if(newDateTime == DateTime.Today)
+            if (newDateTime == DateTime.Today)
             {
                 DateTextToDisplay = "Today";
             }
@@ -76,7 +77,7 @@ namespace GoalTracker.ViewModels
         {
             int postId = (param as DisplayEntry).Id;
             await App.Database.DeleteEntryAsync(postId);
-            CurrentEntries =await  App.Database.GetDisplyEntriesForDateAsync(DateViewing);
+            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
         }
 
         async void AddEntry(Object param)
