@@ -12,13 +12,14 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout Margin="15">
+        <StackLayout Margin="5">
+
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <ImageButton 
                     Source="outline_navigate_before_black_24.png" 
                     BackgroundColor="Transparent"  
                     Command="{Binding DecreaseDateCommand}"/>
-                <Label Text="{Binding DateTextToDisplay}" VerticalOptions="Center" FontSize="Large" Padding="2, 0" WidthRequest="125" HorizontalTextAlignment="Center"/>
+                <DatePicker Date="{Binding DateViewing, Mode=OneWay}" TextColor="{StaticResource Dark}" FontSize="Large"/>
                 <ImageButton 
                     Source="outline_navigate_next_black_24.png" 
                     BackgroundColor="Transparent"

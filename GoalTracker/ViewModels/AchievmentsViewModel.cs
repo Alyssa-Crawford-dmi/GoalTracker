@@ -12,7 +12,6 @@ namespace GoalTracker.ViewModels
         private IList<Category> currentGoals;
         private IList<DisplayEntry> currentEntries;
         private DateTime dateViewing;
-        private string dateTextToDisplay;
 
         public IList<Category> CurrentGoals
         {
@@ -27,12 +26,12 @@ namespace GoalTracker.ViewModels
         public DateTime DateViewing
         {
             get => dateViewing;
-            set => UpdateDateStr(value);
-        }
-        public string DateTextToDisplay
-        {
-            get => dateTextToDisplay;
-            set => SetProperty(ref dateTextToDisplay, value);
+            set
+            {
+                SetProperty(ref dateViewing, value);
+                LoadData();
+                Console.WriteLine(DateViewing);
+            }
         }
 
         public ICommand DeleteCommand { get; }
@@ -47,23 +46,12 @@ namespace GoalTracker.ViewModels
             DecreaseDateCommand = new Command(DecreaseDate);
             IncreaseDateCommand = new Command(IncreaseDate);
             Title = "Achievments";
-            //DateViewing = DateTime.Today;
-            DateViewing = new DateTime(2021, 12, 29);
+            DateViewing = DateTime.Today;
             LoadData();
         }
 
         public async void UpdateDateStr(DateTime newDateTime)
         {
-            SetProperty(ref dateViewing, newDateTime);
-            if (newDateTime == DateTime.Today)
-            {
-                DateTextToDisplay = "Today";
-            }
-            else
-            {
-                DateTextToDisplay = newDateTime.ToShortDateString();
-            }
-            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
 
         }
 
