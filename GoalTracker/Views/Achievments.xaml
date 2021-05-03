@@ -17,12 +17,10 @@
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <ImageButton 
                     Source="outline_navigate_before_black_24.png" 
-                    BackgroundColor="Transparent"  
                     Command="{Binding DecreaseDateCommand}"/>
                 <DatePicker Date="{Binding DateViewing, Mode=OneWay}" TextColor="{StaticResource Dark}" FontSize="Large"/>
                 <ImageButton 
                     Source="outline_navigate_next_black_24.png" 
-                    BackgroundColor="Transparent"
                     Command="{Binding IncreaseDateCommand}"/>
             </StackLayout>
             <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0" />
@@ -40,7 +38,6 @@
                             <ImageButton 
                                 Grid.Column="2" 
                                 Source="outline_clear_black_24.png" 
-                                BackgroundColor="Transparent" 
                                 HorizontalOptions="End" 
                                 Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=Entries}}" 
                                 CommandParameter="{Binding .}"/>
@@ -63,7 +60,6 @@
                             <ImageButton 
                                 Grid.Column="2" 
                                 Source="outline_done_black_24.png" 
-                                BackgroundColor="Transparent" 
                                 HorizontalOptions="End"
                                 Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=Categories}}" 
                                 CommandParameter="{Binding .}"/>
