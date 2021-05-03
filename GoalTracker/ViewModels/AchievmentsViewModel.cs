@@ -9,23 +9,39 @@ namespace GoalTracker.ViewModels
 {
     public class AchievmentsViewModel:BaseViewModel
     {
-        public IList<Category> CurrentGoals { get; private set; }
-        public ICommand DeleteCommand { get; }
+        private IList<Category> currentGoals;
+        public IList<DisplayEntry> currentEntries;
+        public IList<Category> CurrentGoals 
+        { 
+            get=> currentGoals; 
+            private set => SetProperty(ref currentGoals, value); 
+        }
+        public IList<DisplayEntry> CurrentEntries 
+        { 
+            get => currentEntries;
+            private set => SetProperty(ref currentEntries, value); 
+        }
 
+        public ICommand DeleteCommand { get; }
 
         public AchievmentsViewModel()
         {
             DeleteCommand = new Command(DeleteEntry);
             Title = "Achievments";
-            CurrentGoals = new List<Category>();
-            CurrentGoals.Add(new Category{Id=1, Units="Reps", CurrentGoal=20, Name="Squats" });
-            CurrentGoals.Add(new Category{Id=2, Units="Reps", CurrentGoal=10, Name="Push-ups" });
-            CurrentGoals.Add(new Category{Id=3, Units="Reps", CurrentGoal=40, Name="Sit-ups" });
-            CurrentGoals.Add(new Category{Id=4, Units="Min", CurrentGoal=15, Name="Walking" });
+            LoadData();
         }
-        void DeleteEntry()
+
+        private async void LoadData()
         {
-            Console.WriteLine("Amazing if this prints");
+            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync();
+            CurrentGoals = await App.Database.GetCategoriesAsync();
+        }
+
+        async void DeleteEntry(Object param)
+        {
+            int postId = (param as DisplayEntry).Id;
+            await App.Database.DeleteEntryAsync(postId);
+            CurrentEntries =await  App.Database.GetDisplyEntriesForDateAsync();
         }
 
     }

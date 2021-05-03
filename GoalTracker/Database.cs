@@ -38,6 +38,11 @@ namespace GoalTracker
             return _database.InsertAsync(entry);
         }
 
+        public async Task<int> DeleteEntryAsync(int entryId)
+        {
+            return await _database.DeleteAsync<BasicEntry>(entryId);
+        }
+
         public Task<List<Category>> GetCategoriesAsync()
         {
             return _database.Table<Category>().ToListAsync();

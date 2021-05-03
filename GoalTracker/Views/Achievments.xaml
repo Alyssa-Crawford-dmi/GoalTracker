@@ -20,7 +20,7 @@
             </StackLayout>
             <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0"/>
             <CollectionView x:Name="Entries"
-                            SelectionMode="None">
+                            SelectionMode="None" ItemsSource="{Binding CurrentEntries}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
@@ -43,7 +43,7 @@
             </CollectionView>
             <Label Text="Add Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}"/>
             <CollectionView x:Name="Categories"
-                            SelectionMode="None" VerticalOptions="EndAndExpand">
+                            SelectionMode="None" VerticalOptions="EndAndExpand" ItemsSource="{Binding CurrentGoals}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
