@@ -14,9 +14,15 @@
     <ContentPage.Content>
         <StackLayout Margin="15">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                <ImageButton Source="outline_navigate_before_black_24.png" BackgroundColor="Transparent"/>
-                <Label Text="Today" VerticalOptions="Center" FontSize="Large" Padding="5, 0"/>
-                <ImageButton Source="outline_navigate_next_black_24.png" BackgroundColor="Transparent"/>
+                <ImageButton 
+                    Source="outline_navigate_before_black_24.png" 
+                    BackgroundColor="Transparent"  
+                    Command="{Binding DecreaseDateCommand}"/>
+                <Label Text="{Binding DateTextToDisplay}" VerticalOptions="Center" FontSize="Large" Padding="5, 0"/>
+                <ImageButton 
+                    Source="outline_navigate_next_black_24.png" 
+                    BackgroundColor="Transparent"
+                    Command="{Binding IncreaseDateCommand}"/>
             </StackLayout>
             <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0"/>
             <CollectionView x:Name="Entries"
@@ -50,10 +56,16 @@
                               ColumnDefinitions=".3*, .3*, .15*">
                             <Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
                             <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
-                                <Entry Text="{Binding CurrentGoal}" Keyboard="Numeric" Unfocused="Entry_Unfocused"/>
+                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric"/>
                                 <Label Text="{Binding Units}" VerticalOptions="Center"/>
                             </StackLayout>
-                            <ImageButton Grid.Column="2" Source="outline_done_black_24.png" BackgroundColor="Transparent" HorizontalOptions="End"/>
+                            <ImageButton 
+                                Grid.Column="2" 
+                                Source="outline_done_black_24.png" 
+                                BackgroundColor="Transparent" 
+                                HorizontalOptions="End"
+                                Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=Categories}}" 
+                                CommandParameter="{Binding .}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

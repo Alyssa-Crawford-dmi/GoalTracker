@@ -10,7 +10,10 @@ namespace GoalTracker.ViewModels
     public class AchievmentsViewModel:BaseViewModel
     {
         private IList<Category> currentGoals;
-        public IList<DisplayEntry> currentEntries;
+        private IList<DisplayEntry> currentEntries;
+        private DateTime dateViewing;
+        private string dateTextToDisplay;
+
         public IList<Category> CurrentGoals 
         { 
             get=> currentGoals; 
@@ -21,19 +24,51 @@ namespace GoalTracker.ViewModels
             get => currentEntries;
             private set => SetProperty(ref currentEntries, value); 
         }
+        public DateTime DateViewing
+        {
+            get => dateViewing;
+            set => UpdateDateStr(value);
+        }
+        public string DateTextToDisplay
+        {
+            get => dateTextToDisplay;
+            set => SetProperty(ref dateTextToDisplay, value);
+        }
 
         public ICommand DeleteCommand { get; }
+        public ICommand AddCommand { get; }
+        public ICommand DecreaseDateCommand { get; }
+        public ICommand IncreaseDateCommand { get; }
 
         public AchievmentsViewModel()
         {
             DeleteCommand = new Command(DeleteEntry);
+            AddCommand = new Command(AddEntry);
+            DecreaseDateCommand = new Command(DecreaseDate);
+            IncreaseDateCommand = new Command(IncreaseDate);
             Title = "Achievments";
+            DateViewing = DateTime.Today;
             LoadData();
+        }
+
+        public async void UpdateDateStr(DateTime newDateTime)
+        {
+            SetProperty(ref dateViewing, newDateTime);
+            if(newDateTime == DateTime.Today)
+            {
+                DateTextToDisplay = "Today";
+            }
+            else
+            {
+                DateTextToDisplay = newDateTime.ToShortDateString();
+            }
+            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
+
         }
 
         private async void LoadData()
         {
-            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync();
+            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
             CurrentGoals = await App.Database.GetCategoriesAsync();
         }
 
@@ -41,7 +76,27 @@ namespace GoalTracker.ViewModels
         {
             int postId = (param as DisplayEntry).Id;
             await App.Database.DeleteEntryAsync(postId);
-            CurrentEntries =await  App.Database.GetDisplyEntriesForDateAsync();
+            CurrentEntries =await  App.Database.GetDisplyEntriesForDateAsync(DateViewing);
+        }
+
+        async void AddEntry(Object param)
+        {
+            Category goal = param as Category;
+            BasicEntry newEntry = new BasicEntry
+            { CategoryId = goal.Id, Date = dateViewing, IsGoal = false, Quantity = goal.TargetQuantity };
+            await App.Database.SaveEntryAsync(newEntry);
+            CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
+            CurrentGoals = await App.Database.GetCategoriesAsync();
+        }
+
+        private void IncreaseDate(object obj)
+        {
+            DateViewing = DateViewing.AddDays(1);
+        }
+
+        private void DecreaseDate(object obj)
+        {
+            DateViewing = DateViewing.AddDays(-1);
         }
 
     }
