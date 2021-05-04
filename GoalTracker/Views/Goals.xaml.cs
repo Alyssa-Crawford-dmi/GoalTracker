@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoalTracker.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,19 @@ namespace GoalTracker.Views
         public Goals()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            (BindingContext as GoalsViewModel).LoadData();
+            base.OnAppearing();
+        }
+
+        private async void Add_goal(object sender, EventArgs e)
+        {
+            var addGoal = new AddGoal();
+            await Navigation.PushModalAsync(addGoal);
+
         }
     }
 }

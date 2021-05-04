@@ -41,6 +41,11 @@ namespace GoalTracker
         }
 
 
+        public Task<int> SaveCategoryAsync(Category category)
+        {
+            return _database.InsertAsync(category);
+        }
+
         internal Task UpdateCategoryAsync(Category goal)
         {
             return _database.UpdateAsync(goal);

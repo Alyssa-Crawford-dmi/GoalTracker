@@ -44,7 +44,7 @@ namespace GoalTracker.ViewModels
             AddCommand = new Command(AddEntry);
             DecreaseDateCommand = new Command(DecreaseDate);
             IncreaseDateCommand = new Command(IncreaseDate);
-            Title = "Achievments";
+            Title = "Achievements";
             DateViewing = DateTime.Today;
         }
 

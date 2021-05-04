@@ -35,6 +35,15 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <ImageButton 
+                Source="outline_add_white_36.png" 
+                BackgroundColor="{StaticResource Dark}"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="10"
+                Padding="10"
+                Clicked="Add_goal"
+                CornerRadius="100"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

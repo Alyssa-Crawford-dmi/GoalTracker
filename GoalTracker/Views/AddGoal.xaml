@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GoalTracker.Views.AddGoal">
+    <ContentPage.Content>
+        <StackLayout Margin="30">
+            <Entry Placeholder="Name (example: Squats)" x:Name="name"/>
+            <Entry Placeholder="Goal (example: 50)" x:Name="goal" Keyboard="Numeric"/>
+            <Entry Placeholder="Units (example: Reps)" x:Name="units"/>
+            <StackLayout Orientation="Horizontal" Margin="0,20,0,0">
+                <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource SecondaryButton}" 
+                        VerticalOptions="Center" HorizontalOptions="Start"/>
+                <Button Text="Save" Clicked="Save_Clicked" Style="{StaticResource PrimaryButton}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

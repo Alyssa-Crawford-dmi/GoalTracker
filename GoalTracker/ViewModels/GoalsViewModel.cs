@@ -21,7 +21,6 @@ namespace GoalTracker.ViewModels
             Title = "Goals";
             DeleteCommand = new Command(DeleteGoalAsync);
             UpdateCommand = new Command(UpdateGoal);
-            LoadData();
         }
 
         private async void DeleteGoalAsync(object obj)
@@ -42,7 +41,7 @@ namespace GoalTracker.ViewModels
             CurrentGoals = await App.Database.GetCategoriesAsync();
         }
 
-        private async void LoadData()
+        public async void LoadData()
         {
             CurrentGoals = await App.Database.GetCategoriesAsync();
         }

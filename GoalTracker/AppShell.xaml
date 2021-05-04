@@ -30,7 +30,7 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent Title="Achievments" Icon="outline_done_black_24.png" Route="Achievments" ContentTemplate="{DataTemplate local:Achievments}" />
+        <ShellContent Title="Achievments" Icon="outline_done_black_24.png" Route="Achievements" ContentTemplate="{DataTemplate local:Achievments}" />
         <ShellContent Title="Goals" Icon="outline_manage_accounts_black_24.png" Route="Goals" ContentTemplate="{DataTemplate local:Goals}" />
         <ShellContent Title="Trends" Icon="outline_trending_up_black_24.png" Route="Trends" ContentTemplate="{DataTemplate local:Trends}" />
     </TabBar>
