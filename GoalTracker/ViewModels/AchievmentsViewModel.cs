@@ -47,10 +47,9 @@ namespace GoalTracker.ViewModels
             IncreaseDateCommand = new Command(IncreaseDate);
             Title = "Achievments";
             DateViewing = DateTime.Today;
-            LoadData();
         }
 
-        private async void LoadData()
+        public async void LoadData()
         {
             CurrentEntries = await App.Database.GetDisplyEntriesForDateAsync(DateViewing);
             CurrentGoals = await App.Database.GetCategoriesAsync();

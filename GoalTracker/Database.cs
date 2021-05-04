@@ -15,11 +15,6 @@ namespace GoalTracker
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Category>().Wait();
             _database.CreateTableAsync<BasicEntry>().Wait();
-
-            //_database.InsertAsync(new Category { Name = "Fake 1", TargetQuantity = 10, Units = "Reps" });
-            //_database.InsertAsync(new Category { Name = "Fake 2", TargetQuantity = 10, Units = "Reps" });
-            //_database.InsertAsync(new Category { Name = "Fake 3", TargetQuantity = 10, Units = "Reps" });
-            //_database.InsertAsync(new Category { Name = "Fake 4", TargetQuantity = 10, Units = "Reps" });
         }
 
         public async Task<List<DisplayEntry>> GetDisplyEntriesForDateAsync(DateTime date)
@@ -51,9 +46,18 @@ namespace GoalTracker
             return _database.UpdateAsync(goal);
         }
 
-        internal Task DeleteCategoryAsync(int goalId)
+        internal async Task<int> DeleteCategoryAsync(int goalId)
         {
-            return _database.DeleteAsync<Category>(goalId);
+            List<BasicEntry> matchingEntries = await _database.Table<BasicEntry>().Where(entry => entry.CategoryId == goalId).ToListAsync();
+            List<Task> listOfTasks = new List<Task>();
+
+            foreach (BasicEntry entry in matchingEntries)
+            {
+                listOfTasks.Add(_database.DeleteAsync(entry));
+            }
+
+            await Task.WhenAll(listOfTasks);
+            return await _database.DeleteAsync<Category>(goalId);
         }
 
         public Task<List<Category>> GetCategoriesAsync()

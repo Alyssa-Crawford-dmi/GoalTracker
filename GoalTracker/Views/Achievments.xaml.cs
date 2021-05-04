@@ -1,4 +1,5 @@
 ﻿using GoalTracker.Models;
+using GoalTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace GoalTracker.Views
         {
             InitializeComponent();
         }
-
+        protected override void OnAppearing()
+        {
+            (BindingContext as AchievmentsViewModel).LoadData();
+            base.OnAppearing();
+        }
     }
 }
