@@ -9,11 +9,29 @@
         <ResourceDictionary>
             <Color x:Key="Primary">#A4DFE0</Color>
             <Color x:Key="Dark">#2F8789</Color>
+            <Color x:Key="DarkTrans">#992F8789</Color>
             <Color x:Key="VeryDark">#102D2E</Color>
             <Color x:Key="VeryDarkTrans">#99102D2E</Color>
             <Style TargetType="Button" x:Key="PrimaryButton">
-                <Setter Property="BackgroundColor" Value="{StaticResource Dark}" />
-                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Dark}" />
+                                    <Setter Property="TextColor" Value="White"></Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource DarkTrans}" />
+                                    <Setter Property="TextColor" Value="White"></Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+
             </Style>
             <Style TargetType="Button" x:Key="SecondaryButton">
                 <Setter Property="BackgroundColor" Value="Transparent" />

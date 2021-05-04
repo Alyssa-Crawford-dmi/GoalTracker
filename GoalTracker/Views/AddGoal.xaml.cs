@@ -19,6 +19,7 @@ namespace GoalTracker.Views
         }
         protected override void OnAppearing()
         {
+            save_btn.IsEnabled = false;
             base.OnAppearing();
         }
 
@@ -34,6 +35,14 @@ namespace GoalTracker.Views
                 Category newCat = new Category { Name = name.Text, TargetQuantity = int.Parse(goal.Text), Units = units.Text };
                 await App.Database.SaveCategoryAsync(newCat);
                 await Navigation.PopModalAsync();
+            }
+        }
+
+        private void units_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(name.Text) && !String.IsNullOrEmpty(units.Text) && !String.IsNullOrEmpty(goal.Text))
+            {
+                save_btn.IsEnabled = true;
             }
         }
     }

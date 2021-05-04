@@ -6,11 +6,11 @@
         <StackLayout Margin="30">
             <Entry Placeholder="Name (example: Squats)" x:Name="name"/>
             <Entry Placeholder="Goal (example: 50)" x:Name="goal" Keyboard="Numeric"/>
-            <Entry Placeholder="Units (example: Reps)" x:Name="units"/>
+            <Entry Placeholder="Units (example: Reps)" x:Name="units" TextChanged="units_TextChanged"/>
             <StackLayout Orientation="Horizontal" Margin="0,20,0,0">
                 <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource SecondaryButton}" 
                         VerticalOptions="Center" HorizontalOptions="Start"/>
-                <Button Text="Save" Clicked="Save_Clicked" Style="{StaticResource PrimaryButton}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+                <Button Text="Save" Clicked="Save_Clicked" Style="{StaticResource PrimaryButton}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" x:Name="save_btn"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
