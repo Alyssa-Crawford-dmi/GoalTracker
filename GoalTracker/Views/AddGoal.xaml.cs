@@ -45,5 +45,10 @@ namespace GoalTracker.Views
                 save_btn.IsEnabled = true;
             }
         }
+
+        private void units_Completed(object sender, EventArgs e)
+        {
+            Save_Clicked(sender, e);
+        }
     }
 }

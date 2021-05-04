@@ -19,7 +19,7 @@ namespace GoalTracker
 
         public async Task<List<DisplayEntry>> GetDisplyEntriesForDateAsync(DateTime date)
         {
-            List<BasicEntry> basicEntries = await _database.Table<BasicEntry>().Where(entry => entry.Date == date).ToListAsync();
+            List<BasicEntry> basicEntries = await _database.Table<BasicEntry>().Where(entry => entry.Date == date && !entry.IsGoal).ToListAsync();
             List<DisplayEntry> displayEntires = new List<DisplayEntry>();
             foreach (BasicEntry entry in basicEntries)
             {
@@ -41,15 +41,20 @@ namespace GoalTracker
         }
 
 
-        public Task<int> SaveCategoryAsync(Category category)
+        public async Task<int> SaveCategoryAsync(Category category)
         {
-            return _database.InsertAsync(category);
+            var temp = await _database.InsertAsync(category);
+            await addGoalEntry(category);
+            return temp;
         }
 
-        internal Task UpdateCategoryAsync(Category goal)
+
+        internal async Task<int> UpdateCategoryAsync(Category goal)
         {
-            return _database.UpdateAsync(goal);
+            await addGoalEntry(goal);
+            return await _database.UpdateAsync(goal);
         }
+
 
         internal async Task<int> DeleteCategoryAsync(int goalId)
         {
@@ -68,6 +73,12 @@ namespace GoalTracker
         public Task<List<Category>> GetCategoriesAsync()
         {
             return _database.Table<Category>().ToListAsync();
+        }
+
+        private Task addGoalEntry(Category category)
+        {
+            BasicEntry newEntry = new BasicEntry { CategoryId = category.Id, Date = DateTime.Today, IsGoal = true, Quantity = category.TargetQuantity };
+            return SaveEntryAsync(newEntry);
         }
     }
 }
