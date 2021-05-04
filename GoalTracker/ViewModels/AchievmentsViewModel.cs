@@ -30,7 +30,6 @@ namespace GoalTracker.ViewModels
             {
                 SetProperty(ref dateViewing, value);
                 LoadData();
-                Console.WriteLine(DateViewing);
             }
         }
 
