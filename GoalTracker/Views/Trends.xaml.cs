@@ -35,10 +35,10 @@ namespace GoalTracker.Views
             List<BasicEntry> goalEntries = await App.Database.getTrendEntries("Squats", true);
             List<BasicEntry> achievementEntries = await App.Database.getTrendEntries("Squats", false);
 
-            //goals = ConvertToChartEntries(goalEntries, "#2c3e50");
-            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#3498db", DateTime.Today, DateTime.Today.AddDays(7));
+            goals = ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#2c3e50", DateTime.Today, DateTime.Today.AddDays(3));
+            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#3498db", DateTime.Today, DateTime.Today.AddDays(3));
 
-            //goalsChart.Chart = SharedChart(goals);
+            goalsChart.Chart = SharedChart(goals);
             achievementsChart.Chart = SharedChart(achievements);
         }
 
@@ -79,6 +79,36 @@ namespace GoalTracker.Views
                 {
                     BasicEntry entry = entries[entryIndex];
                     results.Add(new ChartEntry(entry.Quantity) { Label = entry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
+                    entryIndex += 1;
+                }
+                curDate = curDate.AddDays(1);
+            }
+            return results;
+        }
+
+        private List<ChartEntry> ConvertToChartEntriesRepeatPrevIfNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
+        {
+            List<ChartEntry> results = new List<ChartEntry>();
+            DateTime curDate = startDate;
+            int entryIndex = 0;
+            BasicEntry lastEntry = null;
+            while (curDate <= endDate)
+            {
+                if (entryIndex >= entries.Count || entries[entryIndex].Date != curDate)
+                {
+                    if (lastEntry != null)
+                    {
+                        results.Add(new ChartEntry(lastEntry.Quantity) { Label = lastEntry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
+                    }
+                    else // TODO get real last entry
+                    {
+                        results.Add(new ChartEntry(0) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
+                    }
+                }
+                else
+                {
+                    lastEntry = entries[entryIndex];
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = lastEntry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
                     entryIndex += 1;
                 }
                 curDate = curDate.AddDays(1);
