@@ -47,14 +47,32 @@ namespace GoalTracker.Views
             InitializeComponent();
             List<ChartEntry> goals = new List<ChartEntry>();
             List<ChartEntry> achievements = new List<ChartEntry>();
+            goals.Add(new ChartEntry(0) { Color = SKColor.Parse("A4DFE0"), Label = "Date", ValueLabel = "1/2" });
             for (int i = 0; i < 20; i++)
             {
-                goals.Add(new ChartEntry(new Random().Next(1, 11)) { Color = SKColor.Parse("A4DFE0") });
+                goals.Add(new ChartEntry(new Random().Next(1, 11)) { Color = SKColor.Parse("A4DFE0"), Label = "Date", ValueLabel = "1/2" });
                 achievements.Add(new ChartEntry(new Random().Next(1, 11)) { Color = SKColor.Parse("2F8789") });
             }
 
-            chartView1.Chart = new BarChart { Entries = goals, BackgroundColor = SKColor.Empty };
-            chartView2.Chart = new LineChart { Entries = achievements, BackgroundColor = SKColor.Empty, LineMode = LineMode.Straight };
+            goalsChart.Chart = new BarChart
+            {
+                Entries = goals,
+                BackgroundColor = SKColor.Empty,
+                BarAreaAlpha = 0,
+                LabelOrientation = Orientation.Horizontal,
+                ValueLabelOrientation = Orientation.Horizontal,
+                LabelTextSize = 20,
+                ShowYAxisLines = true,
+                ShowYAxisText = true,
+                YAxisPosition = Position.Left,
+                Margin = 20,
+                YAxisTextPaint = new SKPaint
+                {
+                    TextSize = 40,
+
+                }
+            };
+            achievementsChart.Chart = new LineChart { Entries = achievements, BackgroundColor = SKColor.Empty, LineMode = LineMode.Straight };
         }
     }
 }

@@ -9,20 +9,21 @@
         <vm:TrendsViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid>
-            <microcharts:ChartView x:Name="chartView1"
-    Grid.Row="3"
-    Grid.Column="0"
-    Grid.ColumnSpan="2"
-    HorizontalOptions="FillAndExpand"
-    VerticalOptions="FillAndExpand" />
+        <StackLayout Margin="10">
 
-            <microcharts:ChartView x:Name="chartView2"
-    Grid.Row="3"
-    Grid.Column="0"
-    Grid.ColumnSpan="2"
-    HorizontalOptions="FillAndExpand"
-    VerticalOptions="FillAndExpand" />
-        </Grid>
+            <Grid VerticalOptions="FillAndExpand">
+                <microcharts:ChartView x:Name="goalsChart"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand" />
+
+                <microcharts:ChartView x:Name="achievementsChart"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand" />
+            </Grid>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
