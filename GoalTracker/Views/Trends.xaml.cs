@@ -1,4 +1,5 @@
-﻿using Microcharts;
+﻿using GoalTracker.Models;
+using Microcharts;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -14,65 +15,75 @@ namespace GoalTracker.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Trends : ContentPage
     {
-        private readonly ChartEntry[] entries = new[]
-        {
-            new ChartEntry(212)
-            {
-                Label = "UWP",
-                ValueLabel = "112",
-                Color = SKColor.Parse("#2c3e50")
-            },
-            new ChartEntry(248)
-            {
-                Label = "Android",
-                ValueLabel = "648",
-                Color = SKColor.Parse("#77d065")
-            },
-            new ChartEntry(128)
-            {
-                Label = "iOS",
-                ValueLabel = "428",
-                Color = SKColor.Parse("#b455b6")
-            },
-            new ChartEntry(514)
-            {
-                Label = "Forms",
-                ValueLabel = "214",
-                Color = SKColor.Parse("#3498db")
-            }
-        };
-
         public Trends()
         {
             InitializeComponent();
-            List<ChartEntry> goals = new List<ChartEntry>();
-            List<ChartEntry> achievements = new List<ChartEntry>();
-            goals.Add(new ChartEntry(0) { Color = SKColor.Parse("A4DFE0"), Label = "Date", ValueLabel = "1/2" });
-            for (int i = 0; i < 20; i++)
-            {
-                goals.Add(new ChartEntry(new Random().Next(1, 11)) { Color = SKColor.Parse("A4DFE0"), Label = "Date", ValueLabel = "1/2" });
-                achievements.Add(new ChartEntry(new Random().Next(1, 11)) { Color = SKColor.Parse("2F8789") });
-            }
 
-            goalsChart.Chart = new BarChart
+        }
+
+        protected override void OnAppearing()
+        {
+            LoadChart();
+            base.OnAppearing();
+        }
+
+        private async void LoadChart()
+        {
+            List<ChartEntry> goals;
+            List<ChartEntry> achievements;
+
+            List<BasicEntry> goalEntries = await App.Database.getTrendEntries("Squats", true);
+            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries("Squats", false);
+
+            //goals = ConvertToChartEntries(goalEntries, "#2c3e50");
+            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#3498db", DateTime.Today, DateTime.Today.AddDays(7));
+
+            //goalsChart.Chart = SharedChart(goals);
+            achievementsChart.Chart = SharedChart(achievements);
+        }
+
+        private Chart SharedChart(List<ChartEntry> list)
+        {
+            return new LineChart
             {
-                Entries = goals,
+                Entries = list,
+                LineMode = LineMode.Straight,
                 BackgroundColor = SKColor.Empty,
-                BarAreaAlpha = 0,
                 LabelOrientation = Orientation.Horizontal,
-                ValueLabelOrientation = Orientation.Horizontal,
                 LabelTextSize = 20,
                 ShowYAxisLines = true,
                 ShowYAxisText = true,
                 YAxisPosition = Position.Left,
-                Margin = 20,
                 YAxisTextPaint = new SKPaint
                 {
                     TextSize = 40,
+                },
+                MinValue = 0,
+                MaxValue = 25
 
-                }
             };
-            achievementsChart.Chart = new LineChart { Entries = achievements, BackgroundColor = SKColor.Empty, LineMode = LineMode.Straight };
+        }
+
+        private List<ChartEntry> ConvertToChartEntriesZeroNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
+        {
+            List<ChartEntry> results = new List<ChartEntry>();
+            DateTime curDate = startDate;
+            int entryIndex = 0;
+            while (curDate <= endDate)
+            {
+                if (entryIndex >= entries.Count || entries[entryIndex].Date != curDate)
+                {
+                    results.Add(new ChartEntry(0) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
+                }
+                else
+                {
+                    BasicEntry entry = entries[entryIndex];
+                    results.Add(new ChartEntry(entry.Quantity) { Label = entry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
+                    entryIndex += 1;
+                }
+                curDate = curDate.AddDays(1);
+            }
+            return results;
         }
     }
 }

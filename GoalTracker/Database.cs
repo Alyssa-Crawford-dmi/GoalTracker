@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GoalTracker.Models;
+using Microcharts;
 using SQLite;
 
 namespace GoalTracker
@@ -30,9 +31,17 @@ namespace GoalTracker
 
             return displayEntires;
         }
-        public Task<int> SaveEntryAsync(BasicEntry entry)
+        public async Task<int> SaveEntryAsync(BasicEntry entry)
         {
-            return _database.InsertAsync(entry);
+            BasicEntry existingEntry = await _database.Table<BasicEntry>()
+                .Where(possibleMatch => (!possibleMatch.IsGoal && possibleMatch.Date == entry.Date && possibleMatch.CategoryId == entry.CategoryId))
+                .FirstOrDefaultAsync();
+            if (existingEntry != null)
+            {
+                existingEntry.Quantity = existingEntry.Quantity + entry.Quantity;
+                return await _database.UpdateAsync(existingEntry);
+            }
+            return await _database.InsertAsync(entry);
         }
 
         public Task<int> DeleteEntryAsync(int entryId)
@@ -40,6 +49,11 @@ namespace GoalTracker
             return _database.DeleteAsync<BasicEntry>(entryId);
         }
 
+        internal async Task<List<BasicEntry>> getTrendEntries(string categoryName, bool isGoal)
+        {
+            Category category = await _database.Table<Category>().Where(cat => cat.Name == categoryName).FirstAsync();
+            return await _database.Table<BasicEntry>().Where(entry => entry.CategoryId == category.Id && entry.IsGoal == isGoal).OrderBy(entry => entry.Date).ToListAsync();
+        }
 
         public async Task<int> SaveCategoryAsync(Category category)
         {
