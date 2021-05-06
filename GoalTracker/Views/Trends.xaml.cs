@@ -18,6 +18,8 @@ namespace GoalTracker.Views
         string categoryName = "Squats";
         DateTime startDate = DateTime.Today;
         DateTime endDate = DateTime.Today.AddDays(7);
+        int minVal = 0;
+        int maxVal = 0;
 
         public Trends()
         {
@@ -42,8 +44,8 @@ namespace GoalTracker.Views
             goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate, endDate);
             achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate, endDate);
 
-            goalsChart.Chart = SharedChart(goals, true);
-            achievementsChart.Chart = SharedChart(achievements, false);
+            goalsChart.Chart = SharedChart(goals, false);
+            achievementsChart.Chart = SharedChart(achievements, true);
         }
 
         private Chart SharedChart(List<ChartEntry> list, bool showLabels)
@@ -55,17 +57,18 @@ namespace GoalTracker.Views
                 BackgroundColor = SKColor.Empty,
                 LabelOrientation = Orientation.Horizontal,
                 LabelColor = showLabels ? SKColor.Parse("#AAA") : SKColor.Empty,
-                LineAreaAlpha = showLabels ? (byte)32 : (byte)0,
-                LabelTextSize = 20,
-                ShowYAxisLines = true,
+                LineAreaAlpha = showLabels ? (byte)0 : (byte)32,
+                LabelTextSize = 30,
+                ShowYAxisLines = showLabels,
                 ShowYAxisText = true,
                 YAxisPosition = Position.Left,
                 YAxisTextPaint = new SKPaint
                 {
                     TextSize = 40,
+                    Color = showLabels ? SKColor.Parse("#AAA") : SKColor.Empty
                 },
-                MinValue = 15,
-                MaxValue = 25
+                MinValue = minVal,
+                MaxValue = maxVal
 
             };
         }
@@ -83,19 +86,19 @@ namespace GoalTracker.Views
             {
                 if (entryIndex >= entries.Count || entries[entryIndex].Date != curDate)
                 {
-                    results.Add(new ChartEntry(0) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(0) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
                 }
                 else
                 {
                     BasicEntry entry = entries[entryIndex];
-                    results.Add(new ChartEntry(entry.Quantity) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(entry.Quantity) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
                     entryIndex += 1;
+                    checkAndUpdateMinMax(entry);
                 }
                 curDate = curDate.AddDays(1);
             }
             return results;
         }
-
         private async Task<List<ChartEntry>> ConvertToChartEntriesRepeatPrevIfNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
         {
             List<ChartEntry> results = new List<ChartEntry>();
@@ -118,17 +121,29 @@ namespace GoalTracker.Views
                             lastEntry = new BasicEntry { Quantity = 0 };
                         }
                     }
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
                 }
                 else
                 {
                     lastEntry = entries[entryIndex];
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
                     entryIndex += 1;
                 }
+                checkAndUpdateMinMax(lastEntry);
                 curDate = curDate.AddDays(1);
             }
             return results;
+        }
+
+        private string getLabel(DateTime curDate)
+        {
+            return curDate.ToString("MM/dd");
+        }
+
+        private void checkAndUpdateMinMax(BasicEntry entry)
+        {
+            if (entry.Quantity < minVal) minVal = entry.Quantity;
+            if (entry.Quantity > maxVal) maxVal = entry.Quantity;
         }
     }
 }

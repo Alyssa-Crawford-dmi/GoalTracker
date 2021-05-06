@@ -37,11 +37,18 @@ namespace GoalTracker
         public async Task<int> SaveEntryAsync(BasicEntry entry)
         {
             BasicEntry existingEntry = await _database.Table<BasicEntry>()
-                .Where(possibleMatch => (!possibleMatch.IsGoal && possibleMatch.Date == entry.Date && possibleMatch.CategoryId == entry.CategoryId))
+                .Where(possibleMatch => (possibleMatch.IsGoal == entry.IsGoal && possibleMatch.Date == entry.Date && possibleMatch.CategoryId == entry.CategoryId))
                 .FirstOrDefaultAsync();
             if (existingEntry != null)
             {
-                existingEntry.Quantity = existingEntry.Quantity + entry.Quantity;
+                if (entry.IsGoal)
+                {
+                    existingEntry.Quantity = entry.Quantity;
+                }
+                else
+                {
+                    existingEntry.Quantity = existingEntry.Quantity + entry.Quantity;
+                }
                 return await _database.UpdateAsync(existingEntry);
             }
             return await _database.InsertAsync(entry);
