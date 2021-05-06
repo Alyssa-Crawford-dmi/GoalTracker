@@ -15,6 +15,10 @@ namespace GoalTracker.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Trends : ContentPage
     {
+        string categoryName = "Squats";
+        DateTime startDate = DateTime.Today;
+        DateTime endDate = DateTime.Today.AddDays(7);
+
         public Trends()
         {
             InitializeComponent();
@@ -32,17 +36,17 @@ namespace GoalTracker.Views
             List<ChartEntry> goals;
             List<ChartEntry> achievements;
 
-            List<BasicEntry> goalEntries = await App.Database.getTrendEntries("Squats", true);
-            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries("Squats", false);
+            List<BasicEntry> goalEntries = await App.Database.getTrendEntries(categoryName, true, startDate, endDate);
+            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries(categoryName, false, startDate, endDate);
 
-            goals = ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#2c3e50", DateTime.Today, DateTime.Today.AddDays(3));
-            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#3498db", DateTime.Today, DateTime.Today.AddDays(3));
+            goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate, endDate);
+            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate, endDate);
 
-            goalsChart.Chart = SharedChart(goals);
-            achievementsChart.Chart = SharedChart(achievements);
+            goalsChart.Chart = SharedChart(goals, true);
+            achievementsChart.Chart = SharedChart(achievements, false);
         }
 
-        private Chart SharedChart(List<ChartEntry> list)
+        private Chart SharedChart(List<ChartEntry> list, bool showLabels)
         {
             return new LineChart
             {
@@ -50,6 +54,8 @@ namespace GoalTracker.Views
                 LineMode = LineMode.Straight,
                 BackgroundColor = SKColor.Empty,
                 LabelOrientation = Orientation.Horizontal,
+                LabelColor = showLabels ? SKColor.Parse("#AAA") : SKColor.Empty,
+                LineAreaAlpha = showLabels ? (byte)32 : (byte)0,
                 LabelTextSize = 20,
                 ShowYAxisLines = true,
                 ShowYAxisText = true,
@@ -58,7 +64,7 @@ namespace GoalTracker.Views
                 {
                     TextSize = 40,
                 },
-                MinValue = 0,
+                MinValue = 15,
                 MaxValue = 25
 
             };
@@ -69,6 +75,10 @@ namespace GoalTracker.Views
             List<ChartEntry> results = new List<ChartEntry>();
             DateTime curDate = startDate;
             int entryIndex = 0;
+            while (entryIndex < entries.Count && entries[entryIndex].Date < curDate)
+            {
+                entryIndex++;
+            }
             while (curDate <= endDate)
             {
                 if (entryIndex >= entries.Count || entries[entryIndex].Date != curDate)
@@ -78,7 +88,7 @@ namespace GoalTracker.Views
                 else
                 {
                     BasicEntry entry = entries[entryIndex];
-                    results.Add(new ChartEntry(entry.Quantity) { Label = entry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(entry.Quantity) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
                     entryIndex += 1;
                 }
                 curDate = curDate.AddDays(1);
@@ -86,29 +96,34 @@ namespace GoalTracker.Views
             return results;
         }
 
-        private List<ChartEntry> ConvertToChartEntriesRepeatPrevIfNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
+        private async Task<List<ChartEntry>> ConvertToChartEntriesRepeatPrevIfNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
         {
             List<ChartEntry> results = new List<ChartEntry>();
             DateTime curDate = startDate;
             int entryIndex = 0;
             BasicEntry lastEntry = null;
+            while (entryIndex < entries.Count && entries[entryIndex].Date < curDate)
+            {
+                entryIndex++;
+            }
             while (curDate <= endDate)
             {
                 if (entryIndex >= entries.Count || entries[entryIndex].Date != curDate)
                 {
-                    if (lastEntry != null)
+                    if (lastEntry == null)
                     {
-                        results.Add(new ChartEntry(lastEntry.Quantity) { Label = lastEntry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
+                        lastEntry = await App.Database.FetchPriorGoalEntry(categoryName, curDate);
+                        if (lastEntry == null)
+                        {
+                            lastEntry = new BasicEntry { Quantity = 0 };
+                        }
                     }
-                    else // TODO get real last entry
-                    {
-                        results.Add(new ChartEntry(0) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
-                    }
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
                 }
                 else
                 {
                     lastEntry = entries[entryIndex];
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = lastEntry.Date.ToShortDateString(), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = curDate.ToShortDateString(), Color = SKColor.Parse(color) });
                     entryIndex += 1;
                 }
                 curDate = curDate.AddDays(1);
