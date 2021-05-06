@@ -2,16 +2,53 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GoalTracker.Views.Trends"
-             xmlns:vm="clr-namespace:GoalTracker.ViewModels"
-             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:vm="clr-namespace:GoalTracker.ViewModels" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
              Title="{Binding Title}">
-    <ContentPage.BindingContext>
-        <vm:TrendsViewModel/>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout Margin="10">
 
-            <Grid VerticalOptions="FillAndExpand">
+    <ContentPage.BindingContext>
+        <vm:TrendsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <Grid Margin="10" RowDefinitions="1*,.5*,4*">
+            <CollectionView x:Name="Categories"
+                            SelectionMode="Single" 
+                            VerticalOptions="Start" 
+                            ItemsSource="{Binding CurrentGoals}" 
+                            SelectionChanged="Categories_SelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Label Text="{Binding Name}" FontSize="Medium"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Grid Grid.Row="1">
+                <Grid Style="{StaticResource LabeledDateGrid}">
+                    <Label Text="Start: " Style="{StaticResource LabelForDate}"/>
+                    <DatePicker Grid.Column="1" x:Name="startDate" DateSelected="dateSelected"/>
+                </Grid>
+                <Grid Style="{StaticResource LabeledDateGrid}" Grid.Column="1">
+                    <Label Text="End: " Style="{StaticResource LabelForDate}"/>
+                    <DatePicker Grid.Column="1" x:Name="endDate" DateSelected="dateSelected"/>
+                </Grid>
+            </Grid>
+            <Grid VerticalOptions="FillAndExpand" MinimumHeightRequest="300" Grid.Row="2">
                 <microcharts:ChartView x:Name="goalsChart"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
@@ -24,6 +61,6 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand" />
             </Grid>
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -6,7 +6,6 @@
              Title="{Binding Title}"
              >
 
-
     <ContentPage.BindingContext>
         <vm:AchievmentsViewModel />
     </ContentPage.BindingContext>
@@ -18,7 +17,8 @@
                 <ImageButton 
                     Source="outline_navigate_before_black_24.png" 
                     Command="{Binding DecreaseDateCommand}"/>
-                <DatePicker Date="{Binding DateViewing, Mode=OneWay}" TextColor="{StaticResource Dark}" FontSize="Large"/>
+                <DatePicker Date="{Binding DateViewing, Mode=OneWay}" 
+                            FontSize="Large"/>
                 <ImageButton 
                     Source="outline_navigate_next_black_24.png" 
                     Command="{Binding IncreaseDateCommand}"/>

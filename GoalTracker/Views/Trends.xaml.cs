@@ -1,4 +1,5 @@
 ﻿using GoalTracker.Models;
+using GoalTracker.ViewModels;
 using Microcharts;
 using SkiaSharp;
 using System;
@@ -15,21 +16,19 @@ namespace GoalTracker.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Trends : ContentPage
     {
-        string categoryName = "Squats";
-        DateTime startDate = DateTime.Today;
-        DateTime endDate = DateTime.Today.AddDays(7);
+        int categoryId;
         int minVal = 0;
         int maxVal = 0;
 
         public Trends()
         {
             InitializeComponent();
-
+            endDate.Date = DateTime.Today.AddDays(7);
         }
 
         protected override void OnAppearing()
         {
-            LoadChart();
+            (BindingContext as TrendsViewModel).LoadData();
             base.OnAppearing();
         }
 
@@ -38,11 +37,11 @@ namespace GoalTracker.Views
             List<ChartEntry> goals;
             List<ChartEntry> achievements;
 
-            List<BasicEntry> goalEntries = await App.Database.getTrendEntries(categoryName, true, startDate, endDate);
-            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries(categoryName, false, startDate, endDate);
+            List<BasicEntry> goalEntries = await App.Database.getTrendEntries(categoryId, true, startDate.Date, endDate.Date);
+            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries(categoryId, false, startDate.Date, endDate.Date);
 
-            goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate, endDate);
-            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate, endDate);
+            goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate.Date, endDate.Date);
+            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate.Date, endDate.Date);
 
             goalsChart.Chart = SharedChart(goals, false);
             achievementsChart.Chart = SharedChart(achievements, true);
@@ -115,7 +114,7 @@ namespace GoalTracker.Views
                 {
                     if (lastEntry == null)
                     {
-                        lastEntry = await App.Database.FetchPriorGoalEntry(categoryName, curDate);
+                        lastEntry = await App.Database.FetchPriorGoalEntry(categoryId, curDate);
                         if (lastEntry == null)
                         {
                             lastEntry = new BasicEntry { Quantity = 0 };
@@ -144,6 +143,18 @@ namespace GoalTracker.Views
         {
             if (entry.Quantity < minVal) minVal = entry.Quantity;
             if (entry.Quantity > maxVal) maxVal = entry.Quantity;
+        }
+
+        private void Categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Category category = e.CurrentSelection[0] as Category;
+            categoryId = category.Id;
+            LoadChart();
+        }
+
+        private void dateSelected(object sender, DateChangedEventArgs e)
+        {
+            LoadChart();
         }
     }
 }
