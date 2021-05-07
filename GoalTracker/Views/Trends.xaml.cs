@@ -16,7 +16,7 @@ namespace GoalTracker.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Trends : ContentPage
     {
-        int categoryId;
+        string categoryName;
         int minVal = 0;
         int maxVal = 0;
 
@@ -37,8 +37,8 @@ namespace GoalTracker.Views
             List<ChartEntry> goals;
             List<ChartEntry> achievements;
 
-            List<BasicEntry> goalEntries = await App.Database.getTrendEntries(categoryId, true, startDate.Date, endDate.Date);
-            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries(categoryId, false, startDate.Date, endDate.Date);
+            List<BasicEntry> goalEntries = await App.Database.getTrendEntries(categoryName, true, startDate.Date, endDate.Date);
+            List<BasicEntry> achievementEntries = await App.Database.getTrendEntries(categoryName, false, startDate.Date, endDate.Date);
 
             goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate.Date, endDate.Date);
             achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate.Date, endDate.Date);
@@ -114,7 +114,7 @@ namespace GoalTracker.Views
                 {
                     if (lastEntry == null)
                     {
-                        lastEntry = await App.Database.FetchPriorGoalEntry(categoryId, curDate);
+                        lastEntry = await App.Database.FetchPriorGoalEntry(categoryName, curDate);
                         if (lastEntry == null)
                         {
                             lastEntry = new BasicEntry { Quantity = 0 };
@@ -148,7 +148,7 @@ namespace GoalTracker.Views
         private void Categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Category category = e.CurrentSelection[0] as Category;
-            categoryId = category.Id;
+            categoryName = category.Name;
             LoadChart();
         }
 

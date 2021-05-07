@@ -28,8 +28,8 @@ namespace GoalTracker.ViewModels
             bool answer = await Application.Current.MainPage.DisplayAlert("Are you sure you want to delete this goal?", "All Corresponding entries will also be deleted", "Delete", "Cancel");
             if (answer)
             {
-                int goalId = (obj as Category).Id;
-                await App.Database.DeleteCategoryAsync(goalId);
+                string goalName = (obj as Category).Name;
+                await App.Database.DeleteCategoryAsync(goalName);
                 CurrentGoals = await App.Database.GetCategoriesAsync();
             }
         }

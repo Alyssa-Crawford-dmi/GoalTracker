@@ -65,7 +65,7 @@ namespace GoalTracker.ViewModels
         {
             Category goal = param as Category;
             BasicEntry newEntry = new BasicEntry
-            { CategoryId = goal.Id, Date = dateViewing, IsGoal = false, Quantity = goal.TargetQuantity };
+            { CategoryName = goal.Name, Date = dateViewing, IsGoal = false, Quantity = goal.TargetQuantity };
             await App.Database.SaveEntryAsync(newEntry);
             LoadData();
         }

@@ -10,7 +10,7 @@ namespace GoalTracker.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public bool IsGoal { get; set; }
-        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public DateTime Date { get; set; }
         public int Quantity { get; set; }
 
