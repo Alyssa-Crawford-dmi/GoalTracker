@@ -21,7 +21,6 @@ namespace GoalTracker.Views
         {
             save_btn.IsEnabled = false;
             base.OnAppearing();
-            //name.Unfocus();
             await Task.Delay(600);
             name.Focus();
         }
