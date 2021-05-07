@@ -30,7 +30,7 @@
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
                               ColumnDefinitions=".3*, .3*, .15*">
-                            <Label Text="{Binding CategoryName}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Text="{Binding CategoryName}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
                             <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
                                 <Label Text="{Binding Quantity}" VerticalOptions="Center" FontSize="Medium"/>
                                 <Label Text="{Binding Units}" VerticalOptions="Center"/>
@@ -52,7 +52,7 @@
                     <DataTemplate>
                         <Grid Padding="7,0,7,7"
                               ColumnDefinitions=".3*, .3*, .15*">
-                            <Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
                             <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="CenterAndExpand">
                                 <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End"/>
                                 <Label Text="{Binding Units}" VerticalOptions="Center"/>

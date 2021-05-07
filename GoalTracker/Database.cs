@@ -17,13 +17,13 @@ namespace GoalTracker
             _database.CreateTableAsync<Category>().Wait();
             _database.CreateTableAsync<BasicEntry>().Wait();
 
-            _database.DeleteAllAsync<BasicEntry>();
-            _database.DeleteAllAsync<Category>();
+            //_database.DeleteAllAsync<BasicEntry>();
+            //_database.DeleteAllAsync<Category>();
         }
 
         public async Task<List<DisplayEntry>> GetDisplyEntriesForDateAsync(DateTime date)
         {
-            List<BasicEntry> basicEntries = await _database.Table<BasicEntry>().Where(entry => entry.Date == date && !entry.IsGoal).ToListAsync();
+            List<BasicEntry> basicEntries = await _database.Table<BasicEntry>().Where(entry => entry.Date == date && !entry.IsGoal).OrderBy(entry => entry.CategoryName).ToListAsync();
             List<DisplayEntry> displayEntires = new List<DisplayEntry>();
             foreach (BasicEntry entry in basicEntries)
             {
@@ -109,7 +109,7 @@ namespace GoalTracker
 
         public Task<List<Category>> GetCategoriesAsync()
         {
-            return _database.Table<Category>().ToListAsync();
+            return _database.Table<Category>().OrderBy(category => category.Name).ToListAsync();
         }
 
         private Task AddGoalEntry(Category category, DateTime entryDate)

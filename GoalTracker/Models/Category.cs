@@ -10,7 +10,7 @@ namespace GoalTracker.Models
         [PrimaryKey]
         public string Name { get; set; }
         public string Units { get; set; }
-        public int TargetQuantity { get; set; }
+        public float TargetQuantity { get; set; }
 
     }
 }

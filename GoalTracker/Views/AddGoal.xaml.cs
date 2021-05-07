@@ -32,7 +32,7 @@ namespace GoalTracker.Views
         {
             if (!String.IsNullOrEmpty(name.Text) && !String.IsNullOrEmpty(units.Text) && !String.IsNullOrEmpty(goal.Text))
             {
-                Category newCat = new Category { Name = name.Text, TargetQuantity = int.Parse(goal.Text), Units = units.Text };
+                Category newCat = new Category { Name = name.Text, TargetQuantity = float.Parse(goal.Text), Units = units.Text };
                 await App.Database.SaveCategoryAsync(newCat);
                 await Navigation.PopModalAsync();
             }

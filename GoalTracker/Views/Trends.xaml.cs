@@ -17,13 +17,13 @@ namespace GoalTracker.Views
     public partial class Trends : ContentPage
     {
         string categoryName;
-        int minVal = 0;
-        int maxVal = 0;
+        float minVal = 0;
+        float maxVal = 0;
 
         public Trends()
         {
             InitializeComponent();
-            endDate.Date = DateTime.Today.AddDays(7);
+            startDate.Date = DateTime.Today.AddDays(-7);
         }
 
         protected override void OnAppearing()
@@ -34,6 +34,10 @@ namespace GoalTracker.Views
 
         private async void LoadChart()
         {
+            if (categoryName == null)
+            {
+                return;
+            }
             List<ChartEntry> goals;
             List<ChartEntry> achievements;
 
@@ -43,8 +47,10 @@ namespace GoalTracker.Views
             goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate.Date, endDate.Date);
             achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate.Date, endDate.Date);
 
-            goalsChart.Chart = SharedChart(goals, false);
-            achievementsChart.Chart = SharedChart(achievements, true);
+            bool useAchievmentLabels = achievementEntries.Count > 0;
+
+            goalsChart.Chart = SharedChart(goals, !useAchievmentLabels);
+            achievementsChart.Chart = SharedChart(achievements, useAchievmentLabels);
         }
 
         private Chart SharedChart(List<ChartEntry> list, bool showLabels)
@@ -136,7 +142,7 @@ namespace GoalTracker.Views
 
         private string getLabel(DateTime curDate)
         {
-            return curDate.ToString("MM/dd");
+            return curDate.ToString("M/dd");
         }
 
         private void checkAndUpdateMinMax(BasicEntry entry)
