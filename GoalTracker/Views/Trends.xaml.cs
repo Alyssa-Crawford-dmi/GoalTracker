@@ -35,8 +35,8 @@ namespace GoalTracker.Views
         private void displayKey()
         {
             var goalEntries = new[] {
-                new ChartEntry(0) { Color = SKColor.Parse("#AAA"), Label = "Goal" },
-                new ChartEntry(5) { Color = SKColor.Parse("#AAA")}};
+                new ChartEntry(0) { Color = SKColor.Empty, Label = "Goal" },
+                new ChartEntry(5) { Color = SKColor.Empty}};
             GoalsKey.Chart = new LineChart
             {
                 Entries = goalEntries,
@@ -72,17 +72,19 @@ namespace GoalTracker.Views
             }
             List<ChartEntry> goals;
             List<ChartEntry> achievements;
+            List<ChartEntry> labels;
 
             List<BasicEntry> goalEntries = await App.Database.getTrendEntries(categoryName, true, startDate.Date, endDate.Date);
             List<BasicEntry> achievementEntries = await App.Database.getTrendEntries(categoryName, false, startDate.Date, endDate.Date);
 
-            goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate.Date, endDate.Date);
-            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate.Date, endDate.Date);
-
+            goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, SKColor.Empty, startDate.Date, endDate.Date);
+            achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, SKColor.Parse("#2F8789"), startDate.Date, endDate.Date);
+            labels = populateLabels();
             //bool useAchievmentLabels = achievementEntries.Count > 0;
 
-            goalsChart.Chart = SharedChart(goals, false);
-            achievementsChart.Chart = SharedChart(achievements, true);
+            goalsChart.Chart = SharedChart(goals, false, true);
+            achievementsChart.Chart = SharedChart(achievements, false);
+            labelsChart.Chart = SharedChart(labels, true);
         }
 
         private void updateAlertAndKeyVisablity()
@@ -104,17 +106,59 @@ namespace GoalTracker.Views
             }
         }
 
-        private Chart SharedChart(List<ChartEntry> list, bool showLabels)
+        private List<ChartEntry> populateLabels()
+        {
+            List<ChartEntry> entries = new List<ChartEntry>();
+            DateTime curDate = startDate.Date;
+            entries.Add(new ChartEntry(minVal) { Label = getLabel(curDate), Color = SKColor.Empty });
+            curDate = curDate.AddDays(1);
+            int labelFrequeny = calculateLabelFrequency();
+            while (curDate < endDate.Date)
+            {
+                int daysDiff = (curDate - startDate.Date).Days;
+                if (daysDiff % labelFrequeny == 0)
+                {
+                    entries.Add(new ChartEntry(maxVal) { Label = getLabel(curDate), Color = SKColor.Empty });
+                }
+                curDate = curDate.AddDays(1);
+            }
+            entries.Add(new ChartEntry(maxVal) { Label = getLabel(curDate), Color = SKColor.Empty });
+            return entries;
+        }
+
+        private int calculateLabelFrequency()
+        {
+            int daysDiff = (endDate.Date - startDate.Date).Days;
+            if (daysDiff < 14)
+            {
+                return 1;
+            }
+            //if (daysDiff < 7)
+            //{
+            //    return 2;
+            //}
+            if (daysDiff < 30)
+            {
+                return 5;
+            }
+            //if (daysDiff < 90)
+            //{
+            //    return 15;
+            //}
+            return 30;
+        }
+
+        private Chart SharedChart(List<ChartEntry> list, bool showLabels, bool showShadow = false)
         {
             return new LineChart
             {
                 Entries = list,
-                LineMode = LineMode.Straight,
+                LineMode = showLabels ? LineMode.None : LineMode.Straight,
                 BackgroundColor = SKColor.Empty,
                 LabelOrientation = Orientation.Horizontal,
                 LabelColor = showLabels ? SKColor.Parse("#AAA") : SKColor.Empty,
-                LineAreaAlpha = showLabels ? (byte)0 : (byte)32,
-                LabelTextSize = 30,
+                LineAreaAlpha = showShadow ? (byte)32 : (byte)0,
+                LabelTextSize = 20,
                 ShowYAxisLines = showLabels,
                 ShowYAxisText = true,
                 YAxisPosition = Position.Left,
@@ -129,7 +173,7 @@ namespace GoalTracker.Views
             };
         }
 
-        private List<ChartEntry> ConvertToChartEntriesZeroNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
+        private List<ChartEntry> ConvertToChartEntriesZeroNoEntry(List<BasicEntry> entries, SKColor color, DateTime startDate, DateTime endDate)
         {
             List<ChartEntry> results = new List<ChartEntry>();
             DateTime curDate = startDate;
@@ -142,12 +186,12 @@ namespace GoalTracker.Views
             {
                 if (entryIndex >= entries.Count || entries[entryIndex].Date != curDate)
                 {
-                    results.Add(new ChartEntry(0) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(0) { Label = getLabel(curDate), Color = color });
                 }
                 else
                 {
                     BasicEntry entry = entries[entryIndex];
-                    results.Add(new ChartEntry(entry.Quantity) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(entry.Quantity) { Label = getLabel(curDate), Color = color });
                     entryIndex += 1;
                     checkAndUpdateMinMax(entry);
                 }
@@ -155,7 +199,7 @@ namespace GoalTracker.Views
             }
             return results;
         }
-        private async Task<List<ChartEntry>> ConvertToChartEntriesRepeatPrevIfNoEntry(List<BasicEntry> entries, string color, DateTime startDate, DateTime endDate)
+        private async Task<List<ChartEntry>> ConvertToChartEntriesRepeatPrevIfNoEntry(List<BasicEntry> entries, SKColor color, DateTime startDate, DateTime endDate)
         {
             List<ChartEntry> results = new List<ChartEntry>();
             DateTime curDate = startDate;
@@ -177,12 +221,12 @@ namespace GoalTracker.Views
                             lastEntry = new BasicEntry { Quantity = 0 };
                         }
                     }
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = color });
                 }
                 else
                 {
                     lastEntry = entries[entryIndex];
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = SKColor.Parse(color) });
+                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = color });
                     entryIndex += 1;
                 }
                 checkAndUpdateMinMax(lastEntry);
@@ -193,7 +237,7 @@ namespace GoalTracker.Views
 
         private string getLabel(DateTime curDate)
         {
-            return curDate.ToString("M/dd");
+            return curDate.ToString("M/d");
         }
 
         private void checkAndUpdateMinMax(BasicEntry entry)

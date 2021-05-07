@@ -75,6 +75,12 @@
                 Grid.ColumnSpan="2"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand" />
+
+                <microcharts:ChartView x:Name="labelsChart"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand" />
             </Grid>
             <Grid VerticalOptions="FillAndExpand" Grid.Row="3" Margin="0" Padding="0" x:Name="keyGroup" IsVisible="false">
                 <Label Text="Key:" FontAttributes="Bold" VerticalOptions="Start"/>
