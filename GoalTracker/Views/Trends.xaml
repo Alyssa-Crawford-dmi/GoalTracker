@@ -10,7 +10,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <Grid Margin="10" RowDefinitions="1*,.5*,4*">
+        <Grid Margin="10" RowDefinitions="1*,.5*,4*, .7*">
             <CollectionView x:Name="Categories"
                             SelectionMode="Single" 
                             VerticalOptions="Start" 
@@ -48,6 +48,20 @@
                     <DatePicker Grid.Column="1" x:Name="endDate" DateSelected="dateSelected"/>
                 </Grid>
             </Grid>
+            <Label 
+                x:Name="categoryAlertText"
+                Grid.Row="2" 
+                Text="Please select a category" 
+                FontSize="Large" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"/>
+            <Label 
+                x:Name="dateAlertText"
+                Grid.Row="2" 
+                Text="Invalid date range. End date must be after start date" 
+                FontSize="Large" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"/>
             <Grid VerticalOptions="FillAndExpand" MinimumHeightRequest="300" Grid.Row="2">
                 <microcharts:ChartView x:Name="goalsChart"
                 Grid.Column="0"
@@ -60,6 +74,11 @@
                 Grid.ColumnSpan="2"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand" />
+            </Grid>
+            <Grid VerticalOptions="FillAndExpand" Grid.Row="3" Margin="0" Padding="0" x:Name="keyGroup" IsVisible="false">
+                <Label Text="Key:" FontAttributes="Bold" VerticalOptions="Start"/>
+                <microcharts:ChartView x:Name="GoalsKey" VerticalOptions="FillAndExpand"/>
+                <microcharts:ChartView x:Name="AchievementsKey" Grid.Column="1" VerticalOptions="FillAndExpand"/>
             </Grid>
         </Grid>
     </ContentPage.Content>

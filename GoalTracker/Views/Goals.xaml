@@ -41,7 +41,7 @@
                 HorizontalOptions="End"
                 VerticalOptions="End"
                 Margin="10"
-                Padding="10"
+                Padding="5"
                 Clicked="Add_goal"
                 CornerRadius="100"/>
         </StackLayout>

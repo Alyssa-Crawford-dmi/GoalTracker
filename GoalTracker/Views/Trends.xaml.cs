@@ -24,6 +24,7 @@ namespace GoalTracker.Views
         {
             InitializeComponent();
             startDate.Date = DateTime.Today.AddDays(-7);
+            displayKey();
         }
 
         protected override void OnAppearing()
@@ -31,11 +32,42 @@ namespace GoalTracker.Views
             (BindingContext as TrendsViewModel).LoadData();
             base.OnAppearing();
         }
+        private void displayKey()
+        {
+            var goalEntries = new[] {
+                new ChartEntry(0) { Color = SKColor.Parse("#AAA"), Label = "Goal" },
+                new ChartEntry(5) { Color = SKColor.Parse("#AAA")}};
+            GoalsKey.Chart = new LineChart
+            {
+                Entries = goalEntries,
+                LineMode = LineMode.Straight,
+                BackgroundColor = SKColor.Empty,
+                LabelOrientation = Orientation.Horizontal,
+                LabelTextSize = 40
+            };
+            var achievmentEntries = new[] {
+                new ChartEntry(0) { Color = SKColor.Parse("#2F8789"), Label = "Entries" },
+                new ChartEntry(5) { Color = SKColor.Parse("#2F8789") } };
+            AchievementsKey.Chart = new LineChart
+            {
+                Entries = achievmentEntries,
+                LineMode = LineMode.Straight,
+                BackgroundColor = SKColor.Empty,
+                LabelOrientation = Orientation.Horizontal,
+                LineAreaAlpha = (byte)0,
+                LabelTextSize = 40,
+            };
+        }
 
         private async void LoadChart()
         {
-            if (categoryName == null)
+            minVal = 0;
+            maxVal = 0;
+            updateAlertAndKeyVisablity();
+            if (categoryName == null || startDate.Date > endDate.Date)
             {
+                goalsChart.Chart = null;
+                achievementsChart.Chart = null;
                 return;
             }
             List<ChartEntry> goals;
@@ -47,10 +79,29 @@ namespace GoalTracker.Views
             goals = await ConvertToChartEntriesRepeatPrevIfNoEntry(goalEntries, "#AAA", startDate.Date, endDate.Date);
             achievements = ConvertToChartEntriesZeroNoEntry(achievementEntries, "#2F8789", startDate.Date, endDate.Date);
 
-            bool useAchievmentLabels = achievementEntries.Count > 0;
+            //bool useAchievmentLabels = achievementEntries.Count > 0;
 
-            goalsChart.Chart = SharedChart(goals, !useAchievmentLabels);
-            achievementsChart.Chart = SharedChart(achievements, useAchievmentLabels);
+            goalsChart.Chart = SharedChart(goals, false);
+            achievementsChart.Chart = SharedChart(achievements, true);
+        }
+
+        private void updateAlertAndKeyVisablity()
+        {
+            keyGroup.IsVisible = false;
+            categoryAlertText.IsVisible = false;
+            dateAlertText.IsVisible = false;
+            if (categoryName == null)
+            {
+                categoryAlertText.IsVisible = true;
+            }
+            else if (startDate.Date > endDate.Date)
+            {
+                dateAlertText.IsVisible = true;
+            }
+            else
+            {
+                keyGroup.IsVisible = true;
+            }
         }
 
         private Chart SharedChart(List<ChartEntry> list, bool showLabels)
