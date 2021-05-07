@@ -17,10 +17,13 @@ namespace GoalTracker.Views
         {
             InitializeComponent();
         }
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             save_btn.IsEnabled = false;
             base.OnAppearing();
+            //name.Unfocus();
+            await Task.Delay(600);
+            name.Focus();
         }
 
         private async void Cancel_Clicked(object sender, EventArgs e)

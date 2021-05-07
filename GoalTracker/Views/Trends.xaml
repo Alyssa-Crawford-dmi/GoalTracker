@@ -15,10 +15,11 @@
                             SelectionMode="Single" 
                             VerticalOptions="Start" 
                             ItemsSource="{Binding CurrentGoals}" 
-                            SelectionChanged="Categories_SelectionChanged">
+                            SelectionChanged="Categories_SelectionChanged"
+                            ItemsLayout="VerticalGrid, 2">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
+                        <StackLayout Padding="10,0">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup Name="CommonStates">
                                     <VisualState Name="Selected">
@@ -33,7 +34,7 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <Label Text="{Binding Name}" FontSize="Medium"/>
+                            <Label Text="{Binding Name}" FontSize="Medium" />
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -51,7 +52,7 @@
             <Label 
                 x:Name="categoryAlertText"
                 Grid.Row="2" 
-                Text="Please select a category" 
+                Text="Please select a goal" 
                 FontSize="Large" 
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"/>
