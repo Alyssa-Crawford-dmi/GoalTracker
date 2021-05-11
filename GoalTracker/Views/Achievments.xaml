@@ -12,54 +12,59 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout Margin="5">
+        <Frame>
+            <Frame.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Left" Threshold="10" Command="{Binding IncreaseDateCommand}"/>
+                <SwipeGestureRecognizer Direction="Right" Threshold="10" Command="{Binding DecreaseDateCommand}"/>
+            </Frame.GestureRecognizers>
+            <StackLayout Margin="5">
 
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0,0,0,20">
-                <ImageButton 
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0,0,0,20">
+                    <ImageButton 
                     Source="outline_navigate_before_black_24.png" 
                     Command="{Binding DecreaseDateCommand}"/>
-                <DatePicker Date="{Binding DateViewing}" 
+                    <DatePicker Date="{Binding DateViewing}" 
                             FontSize="Large"/>
-                <ImageButton 
+                    <ImageButton 
                     Source="outline_navigate_next_black_24.png" 
                     Command="{Binding IncreaseDateCommand}"/>
-            </StackLayout>
-            <CollectionView x:Name="Entries"
+                </StackLayout>
+                <CollectionView x:Name="Entries"
                             SelectionMode="None" 
                             ItemsSource="{Binding CurrentEntries}" 
                             VerticalOptions="Start"
                             >
-                <CollectionView.Header>
-                    <Grid Padding="7,0,7,7"
+                    <CollectionView.Header>
+                        <Grid Padding="7,0,7,7"
                               ColumnDefinitions="1*, 1*, 1.2*">
-                        <Label Text="Goal name" VerticalOptions="Center" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
-                        <Label Text="Completed" Grid.Column="1" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
-                        <Label Text="Modify entry" Grid.Column="2" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                            <Label Text="Goal name" VerticalOptions="Center" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                            <Label Text="Completed" Grid.Column="1" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                            <Label Text="Modify entry" Grid.Column="2" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
 
-                    </Grid>
-                </CollectionView.Header>
-                <CollectionView.ItemTemplate >
-                    <DataTemplate>
-                        <Grid Padding="7,0,7,8"
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate >
+                        <DataTemplate>
+                            <Grid Padding="7,0,7,8"
                               ColumnDefinitions="1*, 1*, 1*, .2*">
-                            <Label Text="{Binding CategoryName}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand">
-                                <Label Text="{Binding Quantity}" VerticalOptions="Center" FontSize="Medium" HorizontalOptions="Start"/>
-                                <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="Start"/>
-                            </StackLayout>
-                            <StackLayout  Orientation="Horizontal" Grid.Column="2" HorizontalOptions="StartAndExpand">
-                                <Entry Text="{Binding Goal}" Keyboard="Numeric" HorizontalTextAlignment="End">
-                                    <Entry.Behaviors>
-                                        <xct:EventToCommandBehavior 
+                                <Label Text="{Binding CategoryName}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand">
+                                    <Label Text="{Binding Quantity}" VerticalOptions="Center" FontSize="Medium" HorizontalOptions="Start"/>
+                                    <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <StackLayout  Orientation="Horizontal" Grid.Column="2" HorizontalOptions="StartAndExpand">
+                                    <Entry Text="{Binding Goal}" Keyboard="Numeric" HorizontalTextAlignment="End">
+                                        <Entry.Behaviors>
+                                            <xct:EventToCommandBehavior 
                                             EventName="Unfocused" 
                                             Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=Entries}}"
                                             CommandParameter="{Binding .}"/>
-                                    </Entry.Behaviors>
-                                </Entry>
-                                <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="End"/>
-                            </StackLayout>
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                    <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="End"/>
+                                </StackLayout>
 
-                            <ImageButton
+                                <ImageButton
                                 Grid.Column="3"
                                     HorizontalOptions="End"
                                     Source="outline_clear_black_24.png" 
@@ -67,10 +72,12 @@
                                     CommandParameter="{Binding .}"/>
 
 
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </Frame>
+
     </ContentPage.Content>
 </ContentPage>
