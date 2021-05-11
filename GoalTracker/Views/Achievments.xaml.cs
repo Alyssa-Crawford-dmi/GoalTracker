@@ -17,10 +17,12 @@ namespace GoalTracker.Views
         public Achievments()
         {
             InitializeComponent();
+            //EntriesLayout.HeightRequest = 20;
         }
         protected override void OnAppearing()
         {
             (BindingContext as AchievmentsViewModel).LoadData();
+            (BindingContext as AchievmentsViewModel).DateViewing = DateTime.Today;
             base.OnAppearing();
         }
     }

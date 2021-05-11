@@ -10,7 +10,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <Grid Margin="10" RowDefinitions="1*,.5*,4*, .7*">
+        <Grid Margin="10" RowDefinitions="1*,.7*,4*, .7*">
             <CollectionView x:Name="Categories"
                             SelectionMode="Single" 
                             VerticalOptions="Start" 
