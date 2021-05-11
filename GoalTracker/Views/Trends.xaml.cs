@@ -17,8 +17,8 @@ namespace GoalTracker.Views
     public partial class Trends : ContentPage
     {
         string categoryName;
-        float minVal = 0;
-        float maxVal = 0;
+        decimal minVal = 0;
+        decimal maxVal = 0;
 
         public Trends()
         {
@@ -110,7 +110,7 @@ namespace GoalTracker.Views
         {
             List<ChartEntry> entries = new List<ChartEntry>();
             DateTime curDate = startDate.Date;
-            entries.Add(new ChartEntry(minVal) { Label = getLabel(curDate), Color = SKColor.Empty });
+            entries.Add(new ChartEntry((float)minVal) { Label = getLabel(curDate), Color = SKColor.Empty });
             curDate = curDate.AddDays(1);
             int labelFrequeny = calculateLabelFrequency();
             while (curDate < endDate.Date)
@@ -118,11 +118,11 @@ namespace GoalTracker.Views
                 int daysDiff = (curDate - startDate.Date).Days;
                 if (daysDiff % labelFrequeny == 0)
                 {
-                    entries.Add(new ChartEntry(maxVal) { Label = getLabel(curDate), Color = SKColor.Empty });
+                    entries.Add(new ChartEntry((float)maxVal) { Label = getLabel(curDate), Color = SKColor.Empty });
                 }
                 curDate = curDate.AddDays(1);
             }
-            entries.Add(new ChartEntry(maxVal) { Label = getLabel(curDate), Color = SKColor.Empty });
+            entries.Add(new ChartEntry((float)maxVal) { Label = getLabel(curDate), Color = SKColor.Empty });
             return entries;
         }
 
@@ -167,8 +167,8 @@ namespace GoalTracker.Views
                     TextSize = 40,
                     Color = showLabels ? SKColor.Parse("#AAA") : SKColor.Empty
                 },
-                MinValue = minVal,
-                MaxValue = maxVal
+                MinValue = (float)minVal,
+                MaxValue = (float)maxVal
 
             };
         }
@@ -191,7 +191,7 @@ namespace GoalTracker.Views
                 else
                 {
                     BasicEntry entry = entries[entryIndex];
-                    results.Add(new ChartEntry(entry.Quantity) { Label = getLabel(curDate), Color = color });
+                    results.Add(new ChartEntry((float)entry.Quantity) { Label = getLabel(curDate), Color = color });
                     entryIndex += 1;
                     checkAndUpdateMinMax(entry);
                 }
@@ -221,12 +221,12 @@ namespace GoalTracker.Views
                             lastEntry = new BasicEntry { Quantity = 0 };
                         }
                     }
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = color });
+                    results.Add(new ChartEntry((float)lastEntry.Quantity) { Label = getLabel(curDate), Color = color });
                 }
                 else
                 {
                     lastEntry = entries[entryIndex];
-                    results.Add(new ChartEntry(lastEntry.Quantity) { Label = getLabel(curDate), Color = color });
+                    results.Add(new ChartEntry((float)lastEntry.Quantity) { Label = getLabel(curDate), Color = color });
                     entryIndex += 1;
                 }
                 checkAndUpdateMinMax(lastEntry);

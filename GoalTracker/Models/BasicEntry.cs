@@ -12,7 +12,7 @@ namespace GoalTracker.Models
         public bool IsGoal { get; set; }
         public string CategoryName { get; set; }
         public DateTime Date { get; set; }
-        public float Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
 
     }

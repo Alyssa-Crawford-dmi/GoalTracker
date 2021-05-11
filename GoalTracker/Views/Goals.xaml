@@ -2,31 +2,42 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GoalTracker.Views.Goals" 
-             xmlns:vm="clr-namespace:GoalTracker.ViewModels"
+             xmlns:vm="clr-namespace:GoalTracker.ViewModels" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Title="{Binding Title}">
     <ContentPage.BindingContext>
         <vm:GoalsViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Margin="5">
+        <StackLayout Margin="20,5,20,5">
             <Label Text="Goals" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}"/>
             <CollectionView x:Name="GoalsList" SelectionMode="None" ItemsSource="{Binding CurrentGoals}">
+                <CollectionView.Header>
+                    <Grid Padding="7,0,7,7"
+                              ColumnDefinitions="2*,2*,.6*">
+                        <Label Text="Goal name" VerticalOptions="Center" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                        <Label Text="Target" Grid.Column="1" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                        <Label Text="Delete" Grid.Column="2" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+
+                    </Grid>
+                </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="7,0,7,7" ColumnDefinitions="2*,2*,1*,1*">
-                            <Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="CenterAndExpand">
-                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End"/>
-                                <Label Text="{Binding Units}" VerticalOptions="Center"/>
+                        <Grid Padding="7,0,7,7" ColumnDefinitions="2*,2*,.5*">
+                            <Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand">
+                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End">
+                                    <Entry.Behaviors>
+                                        <xct:EventToCommandBehavior 
+                                            EventName="Unfocused" 
+                                            Command="{Binding Path=BindingContext.UpdateCommand, Source={x:Reference Name=GoalsList}}"
+                                            CommandParameter="{Binding .}"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                                <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="End"/>
                             </StackLayout>
                             <ImageButton 
                                 Grid.Column="2" 
-                                Source="outline_done_black_24.png" 
-                                HorizontalOptions="End" 
-                                Command="{Binding Path=BindingContext.UpdateCommand, Source={x:Reference Name=GoalsList}}" 
-                                CommandParameter="{Binding .}"/>
-                            <ImageButton 
-                                Grid.Column="3" 
                                 Source="outline_clear_black_24.png" 
                                 HorizontalOptions="End" 
                                 Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=GoalsList}}" 
