@@ -23,12 +23,23 @@ namespace GoalTracker
 
         public async Task<List<DisplayEntry>> GetDisplyEntriesForDateAsync(DateTime date)
         {
-            List<BasicEntry> basicEntries = await _database.Table<BasicEntry>().Where(entry => entry.Date == date && !entry.IsGoal).OrderBy(entry => entry.CategoryName).ToListAsync();
             List<DisplayEntry> displayEntires = new List<DisplayEntry>();
-            foreach (BasicEntry entry in basicEntries)
+            List<Category> Categories = await _database.Table<Category>().ToListAsync();
+            foreach (Category category in Categories)
             {
-                Category category = await _database.Table<Category>().Where(cat => cat.Name == entry.CategoryName).FirstOrDefaultAsync();
-                DisplayEntry displayEntry = new DisplayEntry { CategoryName = category.Name, Date = entry.Date, Quantity = entry.Quantity, Units = category.Units, Id = entry.Id };
+                BasicEntry entry = await _database.Table<BasicEntry>().Where(curEntry => curEntry.Date == date && !curEntry.IsGoal && curEntry.CategoryName == category.Name).FirstOrDefaultAsync();
+                if (entry == null)
+                {
+                    entry = new BasicEntry { Date = DateTime.Today, Quantity = 0, Id = 0 };
+                }
+                DisplayEntry displayEntry = new DisplayEntry
+                {
+                    CategoryName = category.Name,
+                    Quantity = entry.Quantity,
+                    Units = category.Units,
+                    Id = entry.Id,
+                    Goal = category.TargetQuantity
+                };
                 displayEntires.Add(displayEntry);
             }
 
