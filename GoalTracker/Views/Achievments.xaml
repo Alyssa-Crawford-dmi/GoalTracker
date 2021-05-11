@@ -14,7 +14,7 @@
     <ContentPage.Content>
         <StackLayout Margin="5">
 
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0,0,0,20">
                 <ImageButton 
                     Source="outline_navigate_before_black_24.png" 
                     Command="{Binding DecreaseDateCommand}"/>
@@ -24,23 +24,31 @@
                     Source="outline_navigate_next_black_24.png" 
                     Command="{Binding IncreaseDateCommand}"/>
             </StackLayout>
-            <Label Text="Entries" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}" Padding="0, 5,0,0" />
             <CollectionView x:Name="Entries"
                             SelectionMode="None" 
                             ItemsSource="{Binding CurrentEntries}" 
                             VerticalOptions="Start"
                             >
+                <CollectionView.Header>
+                    <Grid Padding="7,0,7,7"
+                              ColumnDefinitions="1*, 1*, 1.2*">
+                        <Label Text="Goal name" VerticalOptions="Center" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                        <Label Text="Completed" Grid.Column="1" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+                        <Label Text="Modify entry" Grid.Column="2" TextColor="{StaticResource Dark}" FontAttributes="Bold"/>
+
+                    </Grid>
+                </CollectionView.Header>
                 <CollectionView.ItemTemplate >
                     <DataTemplate>
-                        <Grid Padding="7,0,7,7"
-                              ColumnDefinitions="1*, 1*, 1*, .5*">
+                        <Grid Padding="7,0,7,8"
+                              ColumnDefinitions="1*, 1*, 1*, .2*">
                             <Label Text="{Binding CategoryName}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
-                                <Label Text="{Binding Quantity}" VerticalOptions="Center" FontSize="Medium"/>
-                                <Label Text="{Binding Units}" VerticalOptions="Center"/>
+                            <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand">
+                                <Label Text="{Binding Quantity}" VerticalOptions="Center" FontSize="Medium" HorizontalOptions="Start"/>
+                                <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="Start"/>
                             </StackLayout>
-                            <StackLayout  Orientation="Horizontal" Grid.Column="2" HorizontalOptions="CenterAndExpand">
-                                <Entry Text="{Binding Goal}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End">
+                            <StackLayout  Orientation="Horizontal" Grid.Column="2" HorizontalOptions="StartAndExpand">
+                                <Entry Text="{Binding Goal}" Keyboard="Numeric" HorizontalTextAlignment="End">
                                     <Entry.Behaviors>
                                         <xct:EventToCommandBehavior 
                                             EventName="Unfocused" 
@@ -48,15 +56,17 @@
                                             CommandParameter="{Binding .}"/>
                                     </Entry.Behaviors>
                                 </Entry>
-                                <Label Text="{Binding Units}" VerticalOptions="Center"/>
+                                <Label Text="{Binding Units}" VerticalOptions="Center" HorizontalOptions="End"/>
                             </StackLayout>
 
                             <ImageButton
-                                Grid.Column="3" 
-                                Source="outline_clear_black_24.png" 
-                                HorizontalOptions="End" 
-                                Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=Entries}}" 
-                                CommandParameter="{Binding .}"/>
+                                Grid.Column="3"
+                                    HorizontalOptions="End"
+                                    Source="outline_clear_black_24.png" 
+                                    Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=Entries}}" 
+                                    CommandParameter="{Binding .}"/>
+
+
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
