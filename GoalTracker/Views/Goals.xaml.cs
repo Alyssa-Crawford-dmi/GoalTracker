@@ -27,7 +27,7 @@ namespace GoalTracker.Views
         private async void Add_goal(object sender, EventArgs e)
         {
             var addGoal = new AddGoal();
-            await Navigation.PushModalAsync(addGoal);
+            await Navigation.PushAsync(addGoal);
 
         }
     }

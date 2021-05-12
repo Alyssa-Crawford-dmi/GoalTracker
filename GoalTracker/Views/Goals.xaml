@@ -9,8 +9,7 @@
         <vm:GoalsViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Margin="20,5,20,5">
-            <Label Text="Goals" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Dark}"/>
+        <StackLayout Margin="20,20,20,5">
             <CollectionView x:Name="GoalsList" SelectionMode="None" ItemsSource="{Binding CurrentGoals}">
                 <CollectionView.Header>
                     <Grid Padding="7,0,7,7"
@@ -26,7 +25,7 @@
                         <Grid Padding="7,0,7,7" ColumnDefinitions="2*,2*,.5*">
                             <Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
                             <StackLayout  Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand">
-                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" WidthRequest="40" HorizontalTextAlignment="End">
+                                <Entry Text="{Binding TargetQuantity}" Keyboard="Numeric" HorizontalTextAlignment="End">
                                     <Entry.Behaviors>
                                         <xct:EventToCommandBehavior 
                                             EventName="Unfocused" 

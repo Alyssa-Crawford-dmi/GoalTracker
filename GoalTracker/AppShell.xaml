@@ -15,7 +15,7 @@
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.ForegroundColor" Value="{StaticResource VeryDark}" />
                 <Setter Property="Shell.TitleColor" Value="{StaticResource VeryDark}" />
                 <Setter Property="Shell.DisabledColor" Value="{StaticResource VeryDarkTrans}" />
                 <Setter Property="Shell.UnselectedColor" Value="{StaticResource VeryDarkTrans}" />
@@ -32,7 +32,7 @@
     <TabBar>
         <ShellContent Title="Achievments" Icon="outline_done_black_24.png" Route="Achievements" ContentTemplate="{DataTemplate local:Achievments}" />
         <ShellContent Title="Goals" Icon="outline_manage_accounts_black_24.png" Route="Goals" ContentTemplate="{DataTemplate local:Goals}" />
-        <ShellContent Title="Trends" Icon="outline_trending_up_black_24.png" Route="Trends" ContentTemplate="{DataTemplate local:Trends}" />
+        <ShellContent Title="Trends" Icon="outline_trending_up_black_24.png" Route="Trends" ContentTemplate="{DataTemplate local:TrendsSetup}" />
     </TabBar>
 
 </Shell>

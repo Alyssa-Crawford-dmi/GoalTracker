@@ -3,43 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GoalTracker.Views.Trends"
              xmlns:vm="clr-namespace:GoalTracker.ViewModels" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
-             Title="{Binding Title}">
+             x:Name="contentPage">
 
     <ContentPage.BindingContext>
         <vm:TrendsViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <Grid Margin="10" RowDefinitions="1*,.7*,4*, .7*">
-            <CollectionView x:Name="Categories"
-                            SelectionMode="Single" 
-                            VerticalOptions="Start" 
-                            ItemsSource="{Binding CurrentGoals}" 
-                            SelectionChanged="Categories_SelectionChanged"
-                            ItemsLayout="VerticalGrid, 2">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10,0">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState Name="Normal">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="Transparent" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Label Text="{Binding Name}" FontSize="Medium" />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Grid Grid.Row="1">
+        <Grid Margin="10" RowDefinitions=".7*,4*, .7*">
+            <Grid Grid.Row="0">
                 <Grid Style="{StaticResource LabeledDateGrid}">
                     <Label Text="Start: " Style="{StaticResource LabelForDate}"/>
                     <DatePicker Grid.Column="1" x:Name="startDate" DateSelected="dateSelected"/>
@@ -51,19 +23,19 @@
             </Grid>
             <Label 
                 x:Name="categoryAlertText"
-                Grid.Row="2" 
+                Grid.Row="1" 
                 Text="Please select a goal" 
                 FontSize="Large" 
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"/>
             <Label 
                 x:Name="dateAlertText"
-                Grid.Row="2" 
+                Grid.Row="1" 
                 Text="Invalid date range. End date must be after start date" 
                 FontSize="Large" 
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"/>
-            <Grid VerticalOptions="FillAndExpand" MinimumHeightRequest="300" Grid.Row="2">
+            <Grid VerticalOptions="FillAndExpand" MinimumHeightRequest="300" Grid.Row="1">
                 <microcharts:ChartView x:Name="goalsChart"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
@@ -82,7 +54,7 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand" />
             </Grid>
-            <Grid VerticalOptions="FillAndExpand" Grid.Row="3" Margin="0" Padding="0" x:Name="keyGroup" IsVisible="false">
+            <Grid VerticalOptions="FillAndExpand" Grid.Row="2" Margin="0" Padding="0" x:Name="keyGroup" IsVisible="false">
                 <Label Text="Key:" FontAttributes="Bold" VerticalOptions="Start"/>
                 <microcharts:ChartView x:Name="GoalsKey" VerticalOptions="FillAndExpand"/>
                 <microcharts:ChartView x:Name="AchievementsKey" Grid.Column="1" VerticalOptions="FillAndExpand"/>

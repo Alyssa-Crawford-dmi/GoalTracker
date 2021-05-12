@@ -16,7 +16,7 @@ namespace GoalTracker.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Trends : ContentPage
     {
-        string categoryName;
+        public string categoryName;
         decimal minVal = 0;
         decimal maxVal = 0;
 
@@ -24,15 +24,16 @@ namespace GoalTracker.Views
         {
             InitializeComponent();
             startDate.Date = DateTime.Today.AddDays(-7);
-            displayKey();
+            DisplayKey();
         }
 
         protected override void OnAppearing()
         {
-            (BindingContext as TrendsViewModel).LoadData();
             base.OnAppearing();
+            LoadChart();
+            contentPage.Title = $"Trends - {categoryName}";
         }
-        private void displayKey()
+        private void DisplayKey()
         {
             var goalEntries = new[] {
                 new ChartEntry(0) { Color = SKColor.Empty, Label = "Goal" },
@@ -246,12 +247,12 @@ namespace GoalTracker.Views
             if (entry.Quantity > maxVal) maxVal = entry.Quantity;
         }
 
-        private void Categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Category category = e.CurrentSelection[0] as Category;
-            categoryName = category.Name;
-            LoadChart();
-        }
+        //private void Categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    Category category = e.CurrentSelection[0] as Category;
+        //    categoryName = category.Name;
+        //    LoadChart();
+        //}
 
         private void dateSelected(object sender, DateChangedEventArgs e)
         {
