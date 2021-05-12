@@ -27,6 +27,12 @@ namespace GoalTracker.Views
             DisplayKey();
         }
 
+        public Trends(DateTime newStartDate, DateTime newEndDate) : this()
+        {
+            startDate.Date = newStartDate;
+            endDate.Date = newEndDate;
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();

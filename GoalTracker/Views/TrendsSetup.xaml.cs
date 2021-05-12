@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoalTracker.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,11 @@ namespace GoalTracker.Views
         public TrendsSetup()
         {
             InitializeComponent();
+        }
+        protected override void OnAppearing()
+        {
+            (BindingContext as TrendsViewModel).LoadData();
+            base.OnAppearing();
         }
     }
 }

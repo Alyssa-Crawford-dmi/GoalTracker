@@ -15,6 +15,22 @@ namespace GoalTracker.ViewModels
         public IList<Category> CurrentGoals { get => currentGoals; set => SetProperty(ref currentGoals, value); }
         public ICommand SelectionCommand { get; }
 
+        private DateTime startDate;
+        private DateTime endDate;
+
+        public DateTime StartDate
+        {
+            get { return startDate; }
+            set { startDate = value; }
+        }
+
+        public DateTime EndDate
+        {
+            get { return endDate; }
+            set { endDate = value; }
+        }
+
+
         public TrendsViewModel()
         {
             Title = "Trends";
@@ -25,7 +41,7 @@ namespace GoalTracker.ViewModels
         private async void SelectionMade(object obj)
         {
             Category category = obj as Category;
-            var trends = new Trends
+            var trends = new Trends(StartDate, EndDate)
             {
                 categoryName = category.Name
             };
@@ -34,6 +50,8 @@ namespace GoalTracker.ViewModels
 
         public async void LoadData()
         {
+            StartDate = DateTime.Today.AddDays(-7);
+            EndDate = DateTime.Today;
             CurrentGoals = await App.Database.GetCategoriesAsync();
         }
 

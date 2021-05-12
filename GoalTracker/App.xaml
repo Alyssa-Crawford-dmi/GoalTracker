@@ -44,7 +44,7 @@
 
             <Style TargetType="Grid" x:Key="LabeledDateGrid">
                 <Setter Property="ColumnDefinitions" Value="1*,2*"/>
-                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="StartAndExpand"/>
             </Style>
             <Style TargetType="Label" x:Key="LabelForDate">
                 <Setter Property="VerticalOptions" Value="Center"/>
@@ -53,6 +53,10 @@
             </Style>
 
             <Style TargetType="DatePicker">
+                <Setter Property="TextColor" Value="{StaticResource Dark}"/>
+            </Style>
+            <Style TargetType="Label" x:Key="customHeader">
+                <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="TextColor" Value="{StaticResource Dark}"/>
             </Style>
         </ResourceDictionary>

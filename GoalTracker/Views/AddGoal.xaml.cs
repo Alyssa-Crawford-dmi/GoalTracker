@@ -27,7 +27,7 @@ namespace GoalTracker.Views
 
         private async void Cancel_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PopModalAsync();
+            await Navigation.PopAsync();
         }
 
         private async void Save_Clicked(object sender, EventArgs e)
@@ -36,7 +36,7 @@ namespace GoalTracker.Views
             {
                 Category newCat = new Category { Name = name.Text, TargetQuantity = decimal.Parse(goal.Text), Units = units.Text };
                 await App.Database.SaveCategoryAsync(newCat);
-                await Navigation.PopModalAsync();
+                await Navigation.PopAsync();
             }
         }
 

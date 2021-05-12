@@ -2,12 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GoalTracker.Views.Trends"
-             xmlns:vm="clr-namespace:GoalTracker.ViewModels" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" 
              x:Name="contentPage">
-
-    <ContentPage.BindingContext>
-        <vm:TrendsViewModel />
-    </ContentPage.BindingContext>
 
     <ContentPage.Content>
         <Grid Margin="10" RowDefinitions=".7*,4*, .7*">

@@ -10,38 +10,58 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <CollectionView x:Name="Goals"
+        <Grid Margin="10" RowDefinitions=".3*,.7*,.5*, 3*,.5*,3*">
+            <Label Text="Click on a row below to see graphs"/>
+            <Grid Grid.Row="1">
+                <Grid Style="{StaticResource LabeledDateGrid}">
+                    <Label Text="Start: " Style="{StaticResource LabelForDate}"/>
+                    <DatePicker Grid.Column="1" Date="{Binding StartDate}"/>
+                </Grid>
+                <Grid Style="{StaticResource LabeledDateGrid}" Grid.Column="1">
+                    <Label Text="End: " Style="{StaticResource LabelForDate}"/>
+                    <DatePicker Grid.Column="1" Date="{Binding EndDate}"/>
+                </Grid>
+            </Grid>
+            <Label Text="Goals" Style="{StaticResource customHeader}" Grid.Row="2"/>
+            <CollectionView x:Name="Goals"
+                            Grid.Row="3"
                             SelectionMode="Single" 
                             VerticalOptions="Start" 
                             ItemSizingStrategy="MeasureFirstItem"
-                            ItemsSource="{Binding CurrentGoals}" 
-                            ItemsLayout="VerticalGrid, 2">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="10,0">
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer
+                            ItemsSource="{Binding CurrentGoals}" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
                                Command="{Binding Path=BindingContext.SelectionCommand, Source={x:Reference Name=Goals}}"
                                             CommandParameter="{Binding .}"/>
-                        </StackLayout.GestureRecognizers>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup Name="CommonStates">
-                                <VisualState Name="Selected">
-                                    <VisualState.Setters>
-                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState Name="Normal">
-                                    <VisualState.Setters>
-                                        <Setter Property="BackgroundColor" Value="Transparent" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Label Text="{Binding Name}" FontSize="Medium" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                            </StackLayout.GestureRecognizers>
+                            <Label Text="{Binding Name}" FontSize="Medium" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label Text="Totals for each unit option" Style="{StaticResource customHeader}" Grid.Row="4"/>
+            <CollectionView x:Name="units"
+                            Grid.Row="5"
+                            SelectionMode="Single" 
+                            VerticalOptions="Start" 
+                            ItemSizingStrategy="MeasureFirstItem"
+                            ItemsSource="{Binding CurrentGoals}" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                               Command="{Binding Path=BindingContext.SelectionCommand, Source={x:Reference Name=Goals}}"
+                                            CommandParameter="{Binding .}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Text="{Binding Name}" FontSize="Medium" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
